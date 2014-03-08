@@ -1,0 +1,12 @@
+# Ignored files
+
+# Examples
+#
+#   /.tmp-file-*
+#   /tmp-dir/*
+#   /symlink*
+#
+sources/
+
+/yapi
+/yapi.exe

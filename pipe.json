@@ -1,0 +1,26 @@
+{
+  "clients": [
+    {
+      "name": "dev",
+      "kind": "ssh",
+      "address": "HOST",
+      "auth": {
+        "username": "USERNAME",
+        "password": "PASSWORD",
+        "keyfile": ""
+      },
+      "isDefault": true
+    },
+    {
+      "name": "prod",
+      "kind": "ssh",
+      "address": "HOST",
+      "auth": {
+        "username": "USERNAME",
+        "password": "PASSWORD",
+        "keyfile": ""
+      },
+      "isDefault": false
+    }
+  ]
+}

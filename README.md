@@ -9,19 +9,19 @@ command using ssh protocol. See [examples](#examples)
 #### Binary distributions
 
 * Linux : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-amd64) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-386) , 
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-arm)
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-amd64.tar.gz) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-386.tar.gz) , 
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-arm.tar.gz)
 * Mac OSX : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-darwin-amd64) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-darwin-386)
-* Windows 8/7/Vista/XP : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-windows-amd64.exe) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-windows-386.exe)
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-darwin-amd64.tar.gz) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-darwin-386.tar.gz)
 * Freebsd : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-amd64) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-386) , 
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-arm)
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-amd64.tar.gz) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-386.tar.gz) , 
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-arm.tar.gz)
+* Windows 8/7/Vista/XP : 
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-windows-amd64.zip) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-windows-386.zip)
 
 #### From source
 

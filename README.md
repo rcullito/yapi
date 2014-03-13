@@ -1,27 +1,28 @@
 ## yapi - Yet Another Pipe Implementation
 
 [yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline. 
-It is **still** under heavy development. Currently it can execute remote system 
-command using ssh protocol. See [examples](#examples)
+Currently it can execute remote system commands using ssh protocol. See [examples](#examples)
+
+For your information; yapi is **still** under heavy development. 
 
 ### Installation
 
 #### Binary distributions
 
 * Linux : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-amd64.tar.gz) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-386.tar.gz) , 
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-linux-arm.tar.gz)
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-linux-amd64.tar.gz) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-linux-386.tar.gz) , 
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-linux-arm.tar.gz)
 * Mac OSX : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-darwin-amd64.tar.gz) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-darwin-386.tar.gz)
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-darwin-amd64.tar.gz) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-darwin-386.tar.gz)
 * Freebsd : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-amd64.tar.gz) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-386.tar.gz) , 
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-freebsd-arm.tar.gz)
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-amd64.tar.gz) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-386.tar.gz) , 
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-arm.tar.gz)
 * Windows 8/7/Vista/XP : 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-windows-amd64.zip) , 
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.3/yapi-windows-386.zip)
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-windows-amd64.zip) , 
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-windows-386.zip)
 
 #### From source
 
@@ -38,8 +39,47 @@ go build yapi.go
 #### Test
 
 ```
-yapi --help
+./yapi --help
 ```
+
+#### Getting started
+
+* Do not forget to make necessary changes in `pipe.json` file before use `yapi` 
+  See [config](#config)  
+* Add the path of yapi binary file to the `PATH` environment variable or 
+  use `./yapi` on Unix-like systems.
+
+#### Examples
+
+##### Example 1
+```
+yapi -cc=ls
+```
+It loads `pipe.json` file in the current working directory. Determine the client by 
+`isDefault` value, executes `ls` command on the remote system and displays output.
+
+##### Example 2
+```
+yapi -pc=/path/pipe.json -cc="tail -f /var/log/syslog"
+```
+It loads `/path/pipe.json`, tails `/var/log/syslog` file on the remote system and 
+wait until the host process exit.
+
+##### Example 3
+```
+yapi -cc="top -b -n 1" | grep ssh
+```
+It executes `top -b -n 1` command on the **remote system**,
+transfer result to the **host system**, executes `grep ssh` on the **host system** 
+and displays output.
+
+##### Example 4
+```
+yapi -cn=dev -cc="ps aux" | yapi -cn=prod -cc="wc -l"
+```
+It executes `ps aux` command on the **remote system** `dev`,
+transfer result to the **remote system** `prod`, counts the lines (`wc -l`)
+and displays output on the **host system**.
 
 #### Config
 
@@ -81,35 +121,6 @@ Here is the default `pipe.json` file.
   ]
 }
 ```
-
-*Do not forget to make necessary changes in `pipe.json` file before use `yapi`*
-
-#### Examples
-
-##### Example 1
-
-```
-yapi -cc=ls
-```
-It loads `pipe.json` file in the current working directory. Determine the client by 
-`isDefault` value, executes `ls` command on the remote system and displays output.
-
-##### Example 2
-
-```
-yapi -pc=/path/pipe.json -cc="tail -f /var/log/syslog"
-```
-It loads `/path/pipe.json`, tails `/var/log/syslog` file on the remote system and 
-wait until the host process exit.
-
-##### Example 3
-
-```
-yapi -cc="top -b -n 1" | grep ssh
-```
-It executes `top -b -n 1` command on the **remote system**,
-transfer data to the **host system**, executes `grep ssh` on the **host system** 
-and displays output.
 
 ### Notes
 

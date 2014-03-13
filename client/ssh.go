@@ -12,6 +12,7 @@ package client
 import (
 	"code.google.com/p/go.crypto/ssh"
 	"errors"
+	"github.com/cmfatih/yapi/stdin"
 	"io"
 	"io/ioutil"
 	"net"
@@ -147,14 +148,20 @@ func (cliSSH *sshClient) ExecCmd(cliCmd string) (bool, error) {
 	}
 	defer cliSSH.sshSess.Close()
 
-	// stdout
-	stdout, err := cliSSH.sshSess.StdoutPipe()
+	// ssh stdin
+	sshStdin, err := cliSSH.sshSess.StdinPipe()
+	if err != nil {
+		return false, errors.New("failed to execute (stdin): " + err.Error())
+	}
+
+	// ssh stdout
+	sshStdout, err := cliSSH.sshSess.StdoutPipe()
 	if err != nil {
 		return false, errors.New("failed to execute (stdout): " + err.Error())
 	}
 
-	// stderr
-	stderr, err := cliSSH.sshSess.StderrPipe()
+	// ssh stderr
+	sshStderr, err := cliSSH.sshSess.StderrPipe()
 	if err != nil {
 		return false, errors.New("failed to execute (stderr): " + err.Error())
 	}
@@ -164,8 +171,18 @@ func (cliSSH *sshClient) ExecCmd(cliCmd string) (bool, error) {
 		return false, errors.New("failed to execute: " + err.Error())
 	}
 
-	go io.Copy(os.Stdout, stdout)
-	go io.Copy(os.Stderr, stderr)
+	if stdin.StdinHasPipe() == true {
+		_, err := io.Copy(sshStdin, stdin.StdinReader())
+		if err != nil {
+			return false, errors.New("failed to copy stdin: " + err.Error())
+		}
+		sshStdin.Close()
+	} else {
+		sshStdin.Close()
+	}
+
+	go io.Copy(os.Stdout, sshStdout)
+	go io.Copy(os.Stderr, sshStderr)
 
 	return true, cliSSH.sshSess.Wait()
 }

@@ -16,7 +16,7 @@ For your information; yapi is **still** under heavy development.
 * Mac OSX : 
   [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-darwin-amd64.tar.gz) , 
   [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-darwin-386.tar.gz)
-* Freebsd : 
+* FreeBSD : 
   [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-amd64.tar.gz) , 
   [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-386.tar.gz) , 
   [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-arm.tar.gz)

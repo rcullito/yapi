@@ -148,20 +148,20 @@ func (cliSSH *sshClient) ExecCmd(cliCmd string) (bool, error) {
 	}
 	defer cliSSH.sshSess.Close()
 
-	// ssh stdin
-	sshStdin, err := cliSSH.sshSess.StdinPipe()
+	// client stdin
+	cliStdin, err := cliSSH.sshSess.StdinPipe()
 	if err != nil {
 		return false, errors.New("failed to execute (stdin): " + err.Error())
 	}
 
-	// ssh stdout
-	sshStdout, err := cliSSH.sshSess.StdoutPipe()
+	// client stdout
+	cliStdout, err := cliSSH.sshSess.StdoutPipe()
 	if err != nil {
 		return false, errors.New("failed to execute (stdout): " + err.Error())
 	}
 
-	// ssh stderr
-	sshStderr, err := cliSSH.sshSess.StderrPipe()
+	// client stderr
+	cliStderr, err := cliSSH.sshSess.StderrPipe()
 	if err != nil {
 		return false, errors.New("failed to execute (stderr): " + err.Error())
 	}
@@ -172,17 +172,17 @@ func (cliSSH *sshClient) ExecCmd(cliCmd string) (bool, error) {
 	}
 
 	if stdin.StdinHasPipe() == true {
-		_, err := io.Copy(sshStdin, stdin.StdinReader())
+		_, err := io.Copy(cliStdin, stdin.StdinReader())
 		if err != nil {
 			return false, errors.New("failed to copy stdin: " + err.Error())
 		}
-		sshStdin.Close()
+		cliStdin.Close()
 	} else {
-		sshStdin.Close()
+		cliStdin.Close()
 	}
 
-	go io.Copy(os.Stdout, sshStdout)
-	go io.Copy(os.Stderr, sshStderr)
+	go io.Copy(os.Stdout, cliStdout)
+	go io.Copy(os.Stderr, cliStderr)
 
 	return true, cliSSH.sshSess.Wait()
 }

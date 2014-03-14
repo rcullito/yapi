@@ -97,7 +97,7 @@ Here is the default `pipe.json` file.
 {
   "clients": [
     {
-      "name": "dev",
+      "name": "sshtest",
       "kind": "ssh",
       "address": "HOST",
       "auth": {
@@ -108,14 +108,9 @@ Here is the default `pipe.json` file.
       "isDefault": true
     },
     {
-      "name": "prod",
-      "kind": "ssh",
-      "address": "HOST",
-      "auth": {
-        "username": "USERNAME",
-        "password": "PASSWORD",
-        "keyfile": ""
-      },
+      "name": "dockertest",
+      "kind": "docker",
+      "address": "",
       "isDefault": false
     }
   ]

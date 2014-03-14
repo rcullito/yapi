@@ -12,7 +12,7 @@ import (
 
 var (
 	clients     = map[string]Client{}
-	clientKinds = map[string]bool{"ssh": true}
+	clientKinds = map[string]bool{"ssh": true, "docker": true}
 	clientNames = map[string]string{}
 )
 
@@ -65,6 +65,19 @@ func New(cliKind, cliName string) (Client, error) {
 
 	if cliKind == "ssh" {
 		cli := sshClient{
+			id:   cliID,
+			name: cliName,
+			kind: cliKind,
+		}
+
+		// Add to the lists
+		clients[cliID] = &cli
+		clientNames[cliName] = cliID
+
+		return &cli, nil
+
+	} else if cliKind == "docker" {
+		cli := dockerClient{
 			id:   cliID,
 			name: cliName,
 			kind: cliKind,

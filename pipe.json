@@ -1,7 +1,7 @@
 {
   "clients": [
     {
-      "name": "dev",
+      "name": "sshtest",
       "kind": "ssh",
       "address": "HOST",
       "auth": {
@@ -12,14 +12,9 @@
       "isDefault": true
     },
     {
-      "name": "prod",
-      "kind": "ssh",
-      "address": "HOST",
-      "auth": {
-        "username": "USERNAME",
-        "password": "PASSWORD",
-        "keyfile": ""
-      },
+      "name": "dockertest",
+      "kind": "docker",
+      "address": "unix:///var/run/docker.sock",
       "isDefault": false
     }
   ]

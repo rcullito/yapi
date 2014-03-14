@@ -103,11 +103,11 @@ func (conf *Conf) Load(filePath string) error {
 			Password: cliConf.Auth.Password,
 			Keyfile:  cliConf.Auth.Keyfile,
 		}); err != nil {
-			return errors.New("client configuration error (auth): " + err.Error())
+			return errors.New("client configuration error (auth) (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
 		}
 
 		if err := cli.SetAddr(cliConf.Address); err != nil {
-			return errors.New("client configuration error (address): " + err.Error())
+			return errors.New("client configuration error (address) (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
 		}
 
 		// Default client

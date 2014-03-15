@@ -5,7 +5,7 @@
 // This file contains docker client implementation.
 //
 // References:
-//   dockerclient 	: https://github.com/samalba/dockerclient
+//   dockerclient 	: https://github.com/cmfatih/dockerclient
 //   Authentication :
 //   	https://github.com/dotcloud/docker/pull/3068
 //   	http://docs.docker.io/en/latest/use/basics/#bind-docker-to-another-host-port-or-a-unix-socket
@@ -20,7 +20,7 @@ package client
 import (
 	"errors"
 	"fmt"
-	dcli "github.com/samalba/dockerclient"
+	dcli "github.com/cmfatih/dockerclient"
 	"net/url"
 )
 

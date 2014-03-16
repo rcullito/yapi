@@ -107,12 +107,6 @@ Here is the default `pipe.json` file.
         "keyfile": ""
       },
       "isDefault": true
-    },
-    {
-      "name": "dockertest",
-      "kind": "docker",
-      "address": "",
-      "isDefault": false
     }
   ]
 }

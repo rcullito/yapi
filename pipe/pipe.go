@@ -27,6 +27,7 @@ type Conf struct {
 type confClient struct {
 	ID        string
 	Name      string         `json:"name"`
+	Groups    []string       `json:"groups"`
 	Kind      string         `json:"kind"`
 	Address   string         `json:"address"`
 	Auth      confClientAuth `json:"auth"`
@@ -93,11 +94,26 @@ func (conf *Conf) Load(filePath string) error {
 
 	for cliInd, cliConf := range conf.Clients {
 
+		// Create client
 		cli, err := client.New(cliConf.Kind, cliConf.Name)
 		if err != nil {
 			return errors.New("failed to create the client (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
 		}
 
+		// Set the ID
+		conf.Clients[cliInd].ID = cli.ID()
+
+		// Set groups
+		if err := cli.SetGroups(cliConf.Groups); err != nil {
+			return errors.New("error on client groups (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
+		}
+
+		// Set address
+		if err := cli.SetAddr(cliConf.Address); err != nil {
+			return errors.New("error on client address (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
+		}
+
+		// Set auth
 		if err := cli.SetAuth(client.ClientAuth{
 			Username: cliConf.Auth.Username,
 			Password: cliConf.Auth.Password,
@@ -106,18 +122,11 @@ func (conf *Conf) Load(filePath string) error {
 			return errors.New("error on client auth (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
 		}
 
-		if err := cli.SetAddr(cliConf.Address); err != nil {
-			return errors.New("error on client address (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
-		}
-
 		// Default client
 		if cliConf.IsDefault == true {
 			defCliID = cli.ID()
 			defCliName = cli.Name()
 		}
-
-		// Set the ID
-		conf.Clients[cliInd].ID = cli.ID()
 	}
 
 	conf.isLoaded = true

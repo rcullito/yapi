@@ -19,14 +19,15 @@ const (
 )
 
 var (
-	gvOS         string    // OS
-	gvCLEC       string    // command line escape char
-	gvPipeConf   pipe.Conf // pipe config
-	flHelp       bool      // help flag
-	flVersion    bool      // version flag
-	flPipeConf   string    // pipe config flag
-	flClientName string    // client name flag
-	flClientCmd  string    // client command flag
+	gvOS          string    // OS
+	gvCLEC        string    // command line escape char
+	gvPipeConf    pipe.Conf // pipe config
+	flHelp        bool      // help flag
+	flVersion     bool      // version flag
+	flPipeConf    string    // pipe config flag
+	flClientName  string    // client name flag
+	flClientGroup string    // client group flag
+	flClientCmd   string    // client command flag
 )
 
 func main() {
@@ -52,23 +53,32 @@ func main() {
 		return
 	}
 
-	// Init the clients
-	cliNames := flagCN(flClientName)
-	if cliNames == nil {
+	// Determine the clients
+	cliNames := flagParser(flClientName, ",")
+	cliGroups := flagParser(flClientGroup, ",")
+
+	if cliNames == nil && cliGroups == nil {
 		if _, cliDefName := gvPipeConf.ClientDef(); cliDefName != "" {
 			cliNames = append(cliNames, cliDefName)
 		}
+	} else if cliGroups != nil {
+		for _, val := range cliGroups {
+			cliList := client.ByGroupName(val)
+			for key, _ := range cliList {
+				cliNames = append(cliNames, cliList[key].Name())
+			}
+		}
 	}
+
 	if cliNames == nil {
-		fmt.Print("Failed to determine a client. Please use [-cn=CLIENTNAME] option.")
+		fmt.Print("Failed to determine a client. Please use [-cn CLIENTNAME] or [-cg GROUPNAME] option.")
 		return
 	}
 
 	// Execute the command
 	for _, cliName := range cliNames {
 		if err := client.ExecCmd(flClientCmd, cliName); err != nil {
-			fmt.Printf("Failed to execute the command: %s", err)
-			return
+			fmt.Printf("Failed to execute the command: %s\n", err)
 		}
 	}
 }
@@ -91,7 +101,9 @@ func init() {
 	flag.BoolVar(&flVersion, "v", false, "Display version information and exit")
 
 	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file")
-	flag.StringVar(&flClientName, "cn", "", "Client name")
+
+	flag.StringVar(&flClientName, "cn", "", "Client name(s). Use comma (,) for multiple.")
+	flag.StringVar(&flClientGroup, "cg", "", "Client group(s). Use comma (,) for multiple.")
 	flag.StringVar(&flClientCmd, "cc", "", "Client command")
 }
 
@@ -114,6 +126,8 @@ func cmdUsage() {
 	fmt.Print("  yapi -cc ls\n")
 	fmt.Print("  yapi -pc /path/pipe.json -cc \"tail -f /var/log/syslog\"\n")
 	fmt.Print("  yapi -cc \"top -b -n 1\" | grep ssh\n")
+	fmt.Print("  yapi -cc hostname -cn \"client1,client2\"\n")
+	fmt.Print("  yapi -cc hostname -cg group1\n")
 
 	fmt.Printf("\nPlease report issues to https://github.com/cmfatih/yapi/issues\n")
 }
@@ -123,19 +137,19 @@ func cmdVer() {
 	fmt.Printf("yapi version %s\n", YAPI_VERSION)
 }
 
-// flagCN parses `cn` flag.
-func flagCN(cn string) []string {
-	if cn != "" {
-		var cns []string
-		spl := strings.Split(cn, ",")
+// flagParser parses flags.
+func flagParser(flagVal, valSep string) []string {
+	if flagVal != "" {
+		var flagVals []string
+		spl := strings.Split(flagVal, valSep)
 		for _, val := range spl {
 			val = strings.TrimSpace(val)
 			if val != "" {
-				cns = append(cns, val)
+				flagVals = append(flagVals, val)
 			}
 		}
 
-		return cns
+		return flagVals
 	}
 
 	return nil

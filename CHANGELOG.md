@@ -5,6 +5,13 @@
 ```
 ```
 
+### 0.2.5 (2014-03-16)
+
+* Multi-client command execution (issue #3)
+* Groups attribute for clients
+* Group option for command execution
+* Restriction for client and group names
+
 ### 0.2.4 (2014-03-12)
 
 * stdin implementation (issue #1)

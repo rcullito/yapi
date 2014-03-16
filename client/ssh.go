@@ -24,6 +24,7 @@ import (
 type sshClient struct {
 	id      string           // id
 	name    string           // name
+	groups  []string         // groups
 	kind    string           // kind of client (ssh)
 	addr    string           // remote system address information
 	addrF   string           // fixed remote system address information
@@ -41,6 +42,26 @@ func (cliSSH *sshClient) ID() string {
 // Name returns the name of the client.
 func (cliSSH *sshClient) Name() string {
 	return cliSSH.name
+}
+
+// Groups returns the groups of the client.
+func (cliSSH *sshClient) Groups() []string {
+	return cliSSH.groups
+}
+
+// SetGroups sets the groups of client.
+func (cliSSH *sshClient) SetGroups(cliGroups []string) error {
+
+	// Check the group names
+	for _, val := range cliGroups {
+		if err := nameCheck(val, "word"); err != nil {
+			return errors.New("invalid group name (" + val + "), " + err.Error())
+		}
+	}
+
+	cliSSH.groups = cliGroups
+
+	return nil
 }
 
 // Kind returns the kind of the client.

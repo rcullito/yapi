@@ -11,21 +11,21 @@ Feedbacks and pull requests are welcome.
 
 #### From binary distributions
 
-* **Version v0.2.4**
+* **Version v0.2.5**
   * Linux : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-linux-amd64.tar.gz) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-linux-386.tar.gz) , 
-    [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-linux-arm.tar.gz)
+    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-amd64.tar.gz) , 
+    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-386.tar.gz) , 
+    [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-arm.tar.gz)
   * Mac OSX : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-darwin-amd64.tar.gz) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-darwin-386.tar.gz)
+    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-darwin-amd64.tar.gz) , 
+    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-darwin-386.tar.gz)
   * FreeBSD : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-amd64.tar.gz) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-386.tar.gz) , 
-    [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-freebsd-arm.tar.gz)
+    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-amd64.tar.gz) , 
+    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-386.tar.gz) , 
+    [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-arm.tar.gz)
   * Windows 8/7/Vista/XP : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-windows-amd64.zip) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.4/yapi-windows-386.zip)
+    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-windows-amd64.zip) , 
+    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-windows-386.zip)
 
 #### From source
 
@@ -84,13 +84,27 @@ It executes `ps aux` command on the **remote system** `dev`,
 transfer result to the **remote system** `prod`, counts the lines (`wc -l`)
 and displays output on the **host system**.
 
+##### Example 5
+```
+yapi -cc hostname -cn "client1,client2"
+```
+It executes `hostname` command on the **remote systems** `client1` and `client2`,
+and displays output on the **host system**.
+
+##### Example 6
+```
+yapi -cc hostname -cg group1
+```
+It executes `hostname` command on the **remote systems** which are part of the
+`group1` group, and displays output on the **host system**.
+
 #### Config
 
 yapi checks `-pc` option or `pipe.json` file in the current working directory 
 for pipe configuration file. Pipe configuration file contains information about 
 clients which is used for remote system connections.  
 
-Currently only ssh protocol supported. For ssh clients; `address` and `username` 
+Currently only ssh protocol is supported. For ssh clients; `address` and `username` 
 should be defined. `password` and `keyfile` are optional and can be used individually 
 or together.
 
@@ -101,6 +115,7 @@ Here is the default `pipe.json` file.
   "clients": [
     {
       "name": "sshtest",
+      "groups": ["test"],
       "kind": "ssh",
       "address": "HOST",
       "auth": {

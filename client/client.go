@@ -26,6 +26,12 @@ type Client interface {
 	// Name returns the name of the client.
 	Name() string
 
+	// Group returns the groups of the client.
+	Groups() []string
+
+	// SetGroups sets the groups of client.
+	SetGroups(cliGroups []string) error
+
 	// Kind returns the kind of the client.
 	Kind() string
 
@@ -62,8 +68,8 @@ func New(cliKind, cliName string) (Client, error) {
 	}
 
 	// Check the name
-	if r, err := regexp.Compile(`^[[:word:]]+$`); err != nil || r.MatchString(cliName) != true {
-		return nil, errors.New("invalid client name, only word characters ([A-Za-z0-9_]) are allowed")
+	if err := nameCheck(cliName, "word"); err != nil {
+		return nil, errors.New("invalid client name (" + cliName + "), " + err.Error())
 	}
 
 	// Init client
@@ -117,6 +123,25 @@ func ByName(cliName string) (Client, error) {
 	return clients[clientNames[cliName]], nil
 }
 
+// ByGroups returns the clients by the given group name.
+func ByGroupName(cliGroupName string) []Client {
+	if cliGroupName != "" {
+		var cs []Client
+		for key, _ := range clients {
+			cliGroups := clients[key].Groups()
+			for _, val2 := range cliGroups {
+				if cliGroupName == val2 {
+					cs = append(cs, clients[key])
+				}
+			}
+		}
+
+		return cs
+	}
+
+	return nil
+}
+
 // ExecCmd executes the given command on the remote system by the given client name.
 func ExecCmd(cliCmd, cliName string) error {
 
@@ -139,4 +164,19 @@ func ExecCmd(cliCmd, cliName string) error {
 	}
 
 	return nil
+}
+
+// nameCheck checks the name with the given name and profile
+func nameCheck(name, profile string) error {
+
+	// Check the name by the profile
+	if profile == "word" {
+		if r, err := regexp.Compile(`^[[:word:]]+$`); err == nil && r.MatchString(name) == true {
+			return nil
+		} else {
+			return errors.New("only word characters ([A-Za-z0-9_]) are allowed")
+		}
+	}
+
+	return errors.New("invalid profile (" + profile + ")")
 }

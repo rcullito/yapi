@@ -30,6 +30,7 @@ var _ = fmt.Println // for debug
 type dockerClient struct {
 	id        string             // id
 	name      string             // name
+	groups    []string           // groups
 	kind      string             // kind of client (docker)
 	addr      string             // remote system address information
 	addrF     string             // fixed remote system address information
@@ -45,6 +46,26 @@ func (cliDocker *dockerClient) ID() string {
 // Name returns the name of the client.
 func (cliDocker *dockerClient) Name() string {
 	return cliDocker.name
+}
+
+// Groups returns the groups of the client.
+func (cliDocker *dockerClient) Groups() []string {
+	return cliDocker.groups
+}
+
+// SetGroups sets the groups of client.
+func (cliDocker *dockerClient) SetGroups(cliGroups []string) error {
+
+	// Check the group names
+	for _, val := range cliGroups {
+		if err := nameCheck(val, "word"); err != nil {
+			return errors.New("invalid group name (" + val + "), " + err.Error())
+		}
+	}
+
+	cliDocker.groups = cliGroups
+
+	return nil
 }
 
 // Kind returns the kind of the client.

@@ -2,6 +2,7 @@
   "clients": [
     {
       "name": "sshtest",
+      "groups": ["test"],
       "kind": "ssh",
       "address": "HOST",
       "auth": {
@@ -10,12 +11,6 @@
         "keyfile": ""
       },
       "isDefault": true
-    },
-    {
-      "name": "dockertest",
-      "kind": "docker",
-      "address": "unix:///var/run/docker.sock",
-      "isDefault": false
     }
   ]
 }

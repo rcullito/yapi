@@ -1,9 +1,11 @@
 ## yapi - Yet Another Pipe Implementation
 
-[yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline. 
+[yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline.  
+
 Currently it can execute remote system commands using ssh protocol. See [examples](#examples)
 
 For your information; yapi is **still** under heavy development. 
+Feedbacks and pull requests are welcome.  
 
 ### Installation
 

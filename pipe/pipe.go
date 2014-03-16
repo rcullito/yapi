@@ -95,7 +95,7 @@ func (conf *Conf) Load(filePath string) error {
 
 		cli, err := client.New(cliConf.Kind, cliConf.Name)
 		if err != nil {
-			return errors.New("client configuration error (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
+			return errors.New("failed to create the client (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
 		}
 
 		if err := cli.SetAuth(client.ClientAuth{
@@ -103,11 +103,11 @@ func (conf *Conf) Load(filePath string) error {
 			Password: cliConf.Auth.Password,
 			Keyfile:  cliConf.Auth.Keyfile,
 		}); err != nil {
-			return errors.New("client configuration error (auth) (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
+			return errors.New("error on client auth (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
 		}
 
 		if err := cli.SetAddr(cliConf.Address); err != nil {
-			return errors.New("client configuration error (address) (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
+			return errors.New("error on client address (index: " + strconv.Itoa(cliInd) + ", name: " + cliConf.Name + "): " + err.Error())
 		}
 
 		// Default client

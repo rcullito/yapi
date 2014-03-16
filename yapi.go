@@ -106,9 +106,9 @@ func cmdUsage() {
 	flag.PrintDefaults()
 
 	fmt.Print("\nExamples:\n")
-	fmt.Print("  yapi -cc=ls\n")
-	fmt.Print("  yapi -pc=/path/pipe.json -cc=\"tail -f /var/log/syslog\"\n")
-	fmt.Print("  yapi -cc=\"top -b -n 1\" | grep ssh\n")
+	fmt.Print("  yapi -cc ls\n")
+	fmt.Print("  yapi -pc /path/pipe.json -cc \"tail -f /var/log/syslog\"\n")
+	fmt.Print("  yapi -cc \"top -b -n 1\" | grep ssh\n")
 
 	fmt.Printf("\nPlease report issues to https://github.com/cmfatih/yapi/issues\n")
 }

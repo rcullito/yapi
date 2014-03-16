@@ -54,21 +54,21 @@ go build yapi.go
 
 ##### Example 1
 ```
-yapi -cc=ls
+yapi -cc ls
 ```
 It loads `pipe.json` file in the current working directory. Determine the client by 
 `isDefault` value, executes `ls` command on the remote system and displays output.
 
 ##### Example 2
 ```
-yapi -pc=/path/pipe.json -cc="tail -f /var/log/syslog"
+yapi -pc /path/pipe.json -cc "tail -f /var/log/syslog"
 ```
 It loads `/path/pipe.json`, tails `/var/log/syslog` file on the remote system and 
 wait until the host process exit.
 
 ##### Example 3
 ```
-yapi -cc="top -b -n 1" | grep ssh
+yapi -cc "top -b -n 1" | grep ssh
 ```
 It executes `top -b -n 1` command on the **remote system**,
 transfer result to the **host system**, executes `grep ssh` on the **host system** 
@@ -76,7 +76,7 @@ and displays output.
 
 ##### Example 4
 ```
-yapi -cn=dev -cc="ps aux" | yapi -cn=prod -cc="wc -l"
+yapi -cn dev -cc "ps aux" | yapi -cn prod -cc "wc -l"
 ```
 It executes `ps aux` command on the **remote system** `dev`,
 transfer result to the **remote system** `prod`, counts the lines (`wc -l`)

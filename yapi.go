@@ -11,6 +11,7 @@ import (
 	"github.com/cmfatih/yapi/client"
 	"github.com/cmfatih/yapi/pipe"
 	"runtime"
+	"strings"
 )
 
 const (
@@ -51,22 +52,24 @@ func main() {
 		return
 	}
 
-	// Init the client
-	cliName := flClientName
-	if cliName == "" {
+	// Init the clients
+	cliNames := flagCN(flClientName)
+	if cliNames == nil {
 		if _, cliDefName := gvPipeConf.ClientDef(); cliDefName != "" {
-			cliName = cliDefName
+			cliNames = append(cliNames, cliDefName)
 		}
 	}
-	if cliName == "" {
+	if cliNames == nil {
 		fmt.Print("Failed to determine a client. Please use [-cn=CLIENTNAME] option.")
 		return
 	}
 
 	// Execute the command
-	if err := client.ExecCmd(flClientCmd, cliName); err != nil {
-		fmt.Printf("Failed to execute the command: %s", err)
-		return
+	for _, cliName := range cliNames {
+		if err := client.ExecCmd(flClientCmd, cliName); err != nil {
+			fmt.Printf("Failed to execute the command: %s", err)
+			return
+		}
 	}
 }
 
@@ -118,4 +121,22 @@ func cmdUsage() {
 // cmdVer displays the version information of the app
 func cmdVer() {
 	fmt.Printf("yapi version %s\n", YAPI_VERSION)
+}
+
+// flagCN parses `cn` flag.
+func flagCN(cn string) []string {
+	if cn != "" {
+		var cns []string
+		spl := strings.Split(cn, ",")
+		for _, val := range spl {
+			val = strings.TrimSpace(val)
+			if val != "" {
+				cns = append(cns, val)
+			}
+		}
+
+		return cns
+	}
+
+	return nil
 }

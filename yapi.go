@@ -87,13 +87,8 @@ func init() {
 	flag.BoolVar(&flVersion, "version", false, "Display version information and exit")
 	flag.BoolVar(&flVersion, "v", false, "Display version information and exit")
 
-	flag.StringVar(&flPipeConf, "pipe-config", "", "Pipe configuration file")
 	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file")
-
-	flag.StringVar(&flClientName, "client-name", "", "Client name")
 	flag.StringVar(&flClientName, "cn", "", "Client name")
-
-	flag.StringVar(&flClientCmd, "client-command", "", "Client command")
 	flag.StringVar(&flClientCmd, "cc", "", "Client command")
 }
 
@@ -103,7 +98,14 @@ func cmdUsage() {
 	fmt.Printf("yapi - Yet Another Pipe Implementation - v%s\n", YAPI_VERSION)
 
 	fmt.Printf("\nOptions:\n")
-	flag.PrintDefaults()
+	//flag.PrintDefaults()
+	flag.VisitAll(func(flg *flag.Flag) {
+		defVal := ""
+		if flg.DefValue != "" && flg.DefValue != "false" {
+			defVal = "(default: " + flg.DefValue + ")"
+		}
+		fmt.Printf("  -%-10s : %s %s\n", flg.Name, flg.Usage, defVal)
+	})
 
 	fmt.Print("\nExamples:\n")
 	fmt.Print("  yapi -cc ls\n")

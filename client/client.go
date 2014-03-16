@@ -8,6 +8,7 @@ package client
 import (
 	"code.google.com/p/go-uuid/uuid"
 	"errors"
+	"regexp"
 )
 
 var (
@@ -55,9 +56,14 @@ func New(cliKind, cliName string) (Client, error) {
 
 	// Check vars
 	if cliName == "" {
-		return nil, errors.New("invalid name")
+		return nil, errors.New("invalid client name")
 	} else if cliKind == "" || clientKinds[cliKind] != true {
 		return nil, errors.New("invalid kind (" + cliKind + ")")
+	}
+
+	// Check the name
+	if r, err := regexp.Compile(`^[[:word:]]+$`); err != nil || r.MatchString(cliName) != true {
+		return nil, errors.New("invalid client name, only word characters ([A-Za-z0-9_]) are allowed")
 	}
 
 	// Init client

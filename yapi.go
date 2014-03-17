@@ -49,9 +49,11 @@ func main() {
 		fmt.Printf("Failed to load pipe configuration: %s", err)
 		return
 	} else if gvPipeConf.IsLoaded() == false {
-		fmt.Printf("Failed to load pipe configuration. Please use [-pc=FILE] option.")
+		fmt.Printf("Failed to load pipe configuration. Please use [-pc FILE] option.")
 		return
 	}
+
+	// TODO: Duplicated client names and groups (issue #8)
 
 	// Determine the clients
 	cliNames := flagParser(flClientName, ",")

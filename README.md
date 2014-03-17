@@ -47,7 +47,9 @@ go build yapi.go
 
 ```
 ./yapi --help
-
+```
+output...
+```
 Usage: yapi [OPTION]...
 
 yapi - Yet Another Pipe Implementation - v0.2.5

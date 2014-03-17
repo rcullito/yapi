@@ -2,9 +2,9 @@
 
 [yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline.  
 
-> We should have some ways of connecting programs like garden hose--screw in 
+> M. Douglas McIlroy ~ We should have some ways of connecting programs like garden hose--screw in 
 > another segment when it becomes when it becomes necessary to massage data in another way. 
-> This is the way of IO also.  ~ M. D. McIlroy  
+> This is the way of IO also.  
 
 Currently yapi can execute remote system commands using ssh protocol. See [examples](#examples)  
 

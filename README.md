@@ -1,43 +1,43 @@
+> We should have some ways of connecting programs like garden hose--screw in 
+> another segment when it becomes when it becomes necessary to massage data in another way. 
+> This is the way of IO also. ~ M. Douglas McIlroy - October 11, 1964  
+
 ## yapi - Yet Another Pipe Implementation
 
-[yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline.  
+[yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline. 
+Currently it can execute remote system commands using ssh protocol. See [examples](#examples)  
 
-> M. Douglas McIlroy ~ We should have some ways of connecting programs like garden hose--screw in 
-> another segment when it becomes when it becomes necessary to massage data in another way. 
-> This is the way of IO also.  
-
-Currently yapi can execute remote system commands using ssh protocol. See [examples](#examples)  
+For your information; yapi is **still** under heavy development. 
+Feedbacks and pull requests are welcome.  
 
 -
 ![yapi-figure-rsce](docs/img/figure-rsceoy.png "Remote System Command Execution on yapi")
 -
 
-For your information; yapi is **still** under heavy development. 
-Feedbacks and pull requests are welcome.  
-
 ### Installation
 
 #### From binary distributions
 
-* **Version v0.2.5**
-  * Linux : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-amd64.tar.gz) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-386.tar.gz) , 
-    [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-arm.tar.gz)
-  * Mac OSX : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-darwin-amd64.tar.gz) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-darwin-386.tar.gz)
-  * FreeBSD : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-amd64.tar.gz) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-386.tar.gz) , 
-    [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-arm.tar.gz)
-  * Windows 8/7/Vista/XP : 
-    [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-windows-amd64.zip) , 
-    [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-windows-386.zip)
+* Linux : [
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-amd64.tar.gz) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-386.tar.gz) |
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-linux-arm.tar.gz) ]
+* Mac OSX : [
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-darwin-amd64.tar.gz) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-darwin-386.tar.gz) ]
+* FreeBSD : [
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-amd64.tar.gz) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-386.tar.gz) |
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-freebsd-arm.tar.gz) ]
+* Windows 8/7/Vista/XP : [ 
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-windows-amd64.zip) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.2.5/yapi-windows-386.zip) ]
+
+For previous versions see [releases](https://github.com/cmfatih/yapi/releases)
 
 #### From source
 
-For HEAD version (or see [releases](https://github.com/cmfatih/yapi/releases))
+For HEAD version
 
 ```
 git clone https://github.com/cmfatih/yapi.git
@@ -47,36 +47,29 @@ go build yapi.go
 
 ### Usage
 
-#### Test
-
-```
-./yapi --help
-```
-output...
-```
-Usage: yapi [OPTION]...
-
-yapi - Yet Another Pipe Implementation - v0.2.5
-
-Options:
-  -cc         : Client command
-  -cg         : Client group(s). Use comma (,) for multiple.
-  -cn         : Client name(s). Use comma (,) for multiple.
-  -h          : Display this help and exit
-  -help       : Display this help and exit
-  -pc         : Pipe configuration file
-  -v          : Display version information and exit
-  -version    : Display version information and exit
-...
-...
-```
-
 #### Getting started
 
 * Do not forget to make necessary changes in `pipe.json` file before use `yapi` 
   See [config](#config)  
 * Add the path of yapi binary file to the `PATH` environment variable or 
   use `./yapi` on Unix-like systems.
+
+#### Help
+
+```
+./yapi --help
+```
+
+#### Options
+
+```
+  -cc          : Client command that will be executed.
+  -cn          : Client name(s) those will be connected. Use comma (,) for multiple.
+  -cg          : Client group name(s) those will be connected. Use comma (,) for multiple.
+  -pc          : Pipe configuration file. Default; pipe.json
+  -h, -help    : Display help and exit.
+  -v, -version : Display version information and exit.
+```
 
 #### Examples
 
@@ -104,10 +97,10 @@ and displays output.
 
 ##### Example 4
 ```
-yapi -cn dev -cc "ps aux" | yapi -cn prod -cc "wc -l"
+yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
 ```
-It executes `ps aux` command on the **remote system** `dev`,
-transfer result to the **remote system** `prod`, counts the lines (`wc -l`)
+It executes `ps aux` command on the **remote system** `client1`,
+transfer result to the **remote system** `client2`, counts the lines (`wc -l`)
 and displays output on the **host system**.
 
 ##### Example 5

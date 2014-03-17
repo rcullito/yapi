@@ -96,17 +96,15 @@ func init() {
 	}
 
 	// Init flags
-	flag.BoolVar(&flHelp, "help", false, "Display this help and exit")
-	flag.BoolVar(&flHelp, "h", false, "Display this help and exit")
+	flag.BoolVar(&flHelp, "help", false, "Display help and exit.")
+	flag.BoolVar(&flHelp, "h", false, "Display help and exit.")
+	flag.BoolVar(&flVersion, "version", false, "Display version information and exit.")
+	flag.BoolVar(&flVersion, "v", false, "Display version information and exit.")
 
-	flag.BoolVar(&flVersion, "version", false, "Display version information and exit")
-	flag.BoolVar(&flVersion, "v", false, "Display version information and exit")
-
-	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file")
-
-	flag.StringVar(&flClientName, "cn", "", "Client name(s). Use comma (,) for multiple.")
-	flag.StringVar(&flClientGroup, "cg", "", "Client group(s). Use comma (,) for multiple.")
-	flag.StringVar(&flClientCmd, "cc", "", "Client command")
+	flag.StringVar(&flClientCmd, "cc", "", "Client command that will be executed.")
+	flag.StringVar(&flClientName, "cn", "", "Client name(s) those will be connected.")
+	flag.StringVar(&flClientGroup, "cg", "", "Client group name(s) those will be connected.")
+	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file. Default; pipe.json")
 }
 
 // cmdUsage displays the usage of the app
@@ -114,22 +112,35 @@ func cmdUsage() {
 	fmt.Print("Usage: yapi [OPTION]...\n\n")
 	fmt.Printf("yapi - Yet Another Pipe Implementation - v%s\n", YAPI_VERSION)
 
-	fmt.Printf("\nOptions:\n")
+	fmt.Printf("\nOptions:")
 	//flag.PrintDefaults()
-	flag.VisitAll(func(flg *flag.Flag) {
-		defVal := ""
-		if flg.DefValue != "" && flg.DefValue != "false" {
-			defVal = "(default: " + flg.DefValue + ")"
-		}
-		fmt.Printf("  -%-10s : %s %s\n", flg.Name, flg.Usage, defVal)
-	})
+	/*
+		flag.VisitAll(func(flg *flag.Flag) {
+			defVal := ""
+			if flg.DefValue != "" && flg.DefValue != "false" {
+				defVal = "(default: " + flg.DefValue + ")"
+			}
+			fmt.Printf("  -%-10s : %s %s\n", flg.Name, flg.Usage, defVal)
+		})
+	*/
+	fmt.Print(`
+  -cc          : Client command that will be executed.
+  -cn          : Client name(s) those will be connected.
+  -cg          : Client group name(s) those will be connected.
+  -pc          : Pipe configuration file. Default; pipe.json
+  -h, -help    : Display help and exit.
+  -v, -version : Display version information and exit.
+  `)
 
-	fmt.Print("\nExamples:\n")
-	fmt.Print("  yapi -cc ls\n")
-	fmt.Print("  yapi -pc /path/pipe.json -cc \"tail -f /var/log/syslog\"\n")
-	fmt.Print("  yapi -cc \"top -b -n 1\" | grep ssh\n")
-	fmt.Print("  yapi -cc hostname -cn \"client1,client2\"\n")
-	fmt.Print("  yapi -cc hostname -cg group1\n")
+	fmt.Printf("\nExamples:")
+	fmt.Print(`
+  yapi -cc ls
+  yapi -pc /path/pipe.json -cc "tail -f /var/log/syslog"
+  yapi -cc "top -b -n 1" | grep ssh
+  yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
+  yapi -cc hostname -cn "client1,client2"
+  yapi -cc hostname -cg group1
+  `)
 
 	fmt.Printf("\nPlease report issues to https://github.com/cmfatih/yapi/issues\n")
 }

@@ -47,6 +47,22 @@ go build yapi.go
 
 ```
 ./yapi --help
+
+Usage: yapi [OPTION]...
+
+yapi - Yet Another Pipe Implementation - v0.2.5
+
+Options:
+  -cc         : Client command
+  -cg         : Client group(s). Use comma (,) for multiple.
+  -cn         : Client name(s). Use comma (,) for multiple.
+  -h          : Display this help and exit
+  -help       : Display this help and exit
+  -pc         : Pipe configuration file
+  -v          : Display version information and exit
+  -version    : Display version information and exit
+...
+...
 ```
 
 #### Getting started

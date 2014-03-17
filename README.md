@@ -8,6 +8,10 @@
 
 Currently yapi can execute remote system commands using ssh protocol. See [examples](#examples)  
 
+-
+![yapi-figure-rsce](docs/img/figure-rsceoy.png "Remote System Command Execution on yapi")
+-
+
 For your information; yapi is **still** under heavy development. 
 Feedbacks and pull requests are welcome.  
 

@@ -19,7 +19,6 @@ const (
 )
 
 var (
-	gvOS          string    // OS
 	gvCLEC        string    // command line escape char
 	gvPipeConf    pipe.Conf // pipe config
 	flHelp        bool      // help flag
@@ -86,8 +85,7 @@ func main() {
 func init() {
 
 	// Init vars
-	gvOS = runtime.GOOS
-	if gvOS == "windows" {
+	if runtime.GOOS == "windows" {
 		gvCLEC = "^"
 	} else {
 		gvCLEC = "\\"

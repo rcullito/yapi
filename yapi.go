@@ -53,11 +53,9 @@ func main() {
 		return
 	}
 
-	// TODO: Duplicated client names and groups (issue #8)
-
 	// Determine the clients
-	cliNames := flagParser(flClientName, ",")
-	cliGroups := flagParser(flClientGroup, ",")
+	cliNames := flagMultiParser(flClientName, ",")
+	cliGroups := flagMultiParser(flClientGroup, ",")
 
 	if cliNames == nil && cliGroups == nil {
 		if _, cliDefName := gvPipeConf.ClientDef(); cliDefName != "" {
@@ -150,15 +148,17 @@ func cmdVer() {
 	fmt.Printf("yapi version %s\n", YAPI_VERSION)
 }
 
-// flagParser parses flags.
-func flagParser(flagVal, valSep string) []string {
+// flagMultiParser parses multiple flag values.
+func flagMultiParser(flagVal, valSep string) []string {
 	if flagVal != "" {
 		var flagVals []string
+		founds := make(map[string]bool)
 		spl := strings.Split(flagVal, valSep)
 		for _, val := range spl {
 			val = strings.TrimSpace(val)
-			if val != "" {
+			if val != "" && founds[val] == false {
 				flagVals = append(flagVals, val)
+				founds[val] = true
 			}
 		}
 

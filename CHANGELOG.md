@@ -3,6 +3,10 @@
 ### HEAD
 
 ```
+* Update for flags, options, examples
+* Fix for duplicated client names and groups (issue #8)
+* New option for client command execution method (-ccem)
+* Worker pkg - worker.go, cce.go
 ```
 
 ### 0.2.5 (2014-03-16)

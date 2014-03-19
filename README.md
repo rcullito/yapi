@@ -71,6 +71,9 @@ go build yapi.go
   -cg       : Client group name(s) those will be connected. 
               Use comma (,) for multi-group.
 
+  -ccem     : Execution method for client command. Default; serial
+              Possible values; serial (~), parallel (//)
+
   -pc       : Pipe configuration file. Default; pipe.json
 
   -help     : Display help and exit.

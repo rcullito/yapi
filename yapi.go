@@ -10,12 +10,13 @@ import (
 	"fmt"
 	"github.com/cmfatih/yapi/client"
 	"github.com/cmfatih/yapi/pipe"
+	"github.com/cmfatih/yapi/worker"
 	"runtime"
 	"strings"
 )
 
 const (
-	YAPI_VERSION = "0.2.5" // app version
+	YAPI_VERSION = "HEAD^0.2.5" // app version
 )
 
 var (
@@ -27,6 +28,7 @@ var (
 	flClientName  string    // client name flag
 	flClientGroup string    // client group flag
 	flClientCmd   string    // client command flag
+	flClientCEM   string    // client command execution method
 )
 
 func main() {
@@ -55,7 +57,6 @@ func main() {
 	// Determine the clients
 	cliNames := flagMultiParser(flClientName, ",")
 	cliGroups := flagMultiParser(flClientGroup, ",")
-
 	if cliNames == nil && cliGroups == nil {
 		if _, cliDefName := gvPipeConf.ClientDef(); cliDefName != "" {
 			cliNames = append(cliNames, cliDefName)
@@ -68,16 +69,35 @@ func main() {
 			}
 		}
 	}
-
 	if cliNames == nil {
 		fmt.Print("Failed to determine a client. Please use [-cn CLIENTNAME] or [-cg GROUPNAME] option.")
 		return
 	}
 
-	// Execute the command
-	for _, cliName := range cliNames {
-		if err := client.ExecCmd(flClientCmd, cliName); err != nil {
+	// Execute the client command
+	if flClientCmd != "" {
+		cliCCEM := flagSymbolParser(flClientCEM)
+		if cliCCEM != "serial" && cliCCEM != "parallel" {
+			fmt.Println("Invalid client command execution method. Please use [-ccem serial] or [-ccem parallel]")
+			return
+		}
+
+		ccew, err := worker.New("cce")
+		if err != nil {
 			fmt.Printf("Failed to execute the command: %s\n", err)
+			return
+		}
+		if err := ccew.SetOptions(
+			worker.WorkerOptions{
+				Putty: worker.CCEOptions{Clients: cliNames, Cmd: flClientCmd, CmdErrPrint: true, Method: cliCCEM},
+			},
+		); err != nil {
+			fmt.Printf("Failed to execute the command: %s\n", err)
+			return
+		}
+		if err := ccew.Start(); err != nil {
+			fmt.Printf("Failed to execute the command: %s\n", err)
+			return
 		}
 	}
 }
@@ -100,6 +120,7 @@ func init() {
 	flag.StringVar(&flClientCmd, "cc", "", "Client command that will be executed.")
 	flag.StringVar(&flClientName, "cn", "", "Client name(s) those will be connected.")
 	flag.StringVar(&flClientGroup, "cg", "", "Client group name(s) those will be connected.")
+	flag.StringVar(&flClientCEM, "ccem", "serial", "Execution method for client command. Default; serial")
 	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file. Default; pipe.json")
 }
 
@@ -120,12 +141,18 @@ func cmdUsage() {
 		})
 	*/
 	fmt.Print(`
-  -cc          : Client command that will be executed.
-  -cn          : Client name(s) those will be connected.
-  -cg          : Client group name(s) those will be connected.
-  -pc          : Pipe configuration file. Default; pipe.json
-  -h, -help    : Display help and exit.
-  -v, -version : Display version information and exit.
+  -cc       : Client command that will be executed.
+  -cn       : Client name(s) those will be connected.
+              Use comma (,) for multi-client.
+  -cg       : Client group name(s) those will be connected. 
+              Use comma (,) for multi-group.
+  -ccem     : Execution method for client command. Default; serial
+              Possible values; serial (~), parallel (//)
+  -pc       : Pipe configuration file. Default; pipe.json
+  -help     : Display help and exit.
+  -h
+  -version  : Display version information and exit.
+  -v
   `)
 
 	fmt.Printf("\nExamples:")
@@ -164,4 +191,15 @@ func flagMultiParser(flagVal, valSep string) []string {
 	}
 
 	return nil
+}
+
+// flagSymbolParser parses symbol flag values.
+func flagSymbolParser(flagVal string) string {
+	if flagVal == "~" {
+		return "serial"
+	} else if flagVal == "//" {
+		return "parallel"
+	}
+
+	return flagVal
 }

@@ -161,8 +161,8 @@ func cmdUsage() {
   yapi -pc /path/pipe.json -cc "tail -f /var/log/syslog"
   yapi -cc "top -b -n 1" | grep ssh
   yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
-  yapi -cc hostname -cn "client1,client2"
-  yapi -cc hostname -cg group1
+  yapi -cc hostname -cn "client1,client2" -ccem parallel
+  yapi -cc hostname -cg group1 -ccem parallel
   `)
 
 	fmt.Printf("\nPlease report issues to https://github.com/cmfatih/yapi/issues\n")

@@ -117,14 +117,14 @@ and displays output on the **host system**.
 
 ##### Example 5
 ```
-yapi -cc hostname -cn "client1,client2"
+yapi -cc hostname -cn "client1,client2" -ccem parallel
 ```
 It executes `hostname` command on the **remote systems** `client1` and `client2`,
 and displays output on the **host system**.
 
 ##### Example 6
 ```
-yapi -cc hostname -cg group1
+yapi -cc hostname -cg group1 -ccem parallel
 ```
 It executes `hostname` command on the **remote systems** which are part of the
 `group1` group, and displays output on the **host system**.

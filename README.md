@@ -11,7 +11,7 @@ For your information; yapi is **still** under heavy development.
 Feedbacks and pull requests are welcome.  
 
 -
-![yapi-figure-rsce](docs/img/figure-rsceoy.png "Remote System Command Execution on yapi")
+![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")
 -
 
 ### Installation

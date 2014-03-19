@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	YAPI_VERSION = "HEAD^0.2.5" // app version
+	YAPI_VERSION = "0.3.0" // app version
 )
 
 var (

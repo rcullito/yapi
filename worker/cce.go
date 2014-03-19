@@ -66,7 +66,6 @@ func (wCCE *cceWorker) Start() error {
 	chann := make(chan bool)
 
 	if wCCE.options.Method == "serial" {
-
 		// Launch the goroutine
 		go func() {
 			for _, name := range wCCE.options.Clients {

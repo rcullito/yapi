@@ -63,12 +63,21 @@ go build yapi.go
 #### Options
 
 ```
-  -cc          : Client command that will be executed.
-  -cn          : Client name(s) those will be connected. Use comma (,) for multiple.
-  -cg          : Client group name(s) those will be connected. Use comma (,) for multiple.
-  -pc          : Pipe configuration file. Default; pipe.json
-  -h, -help    : Display help and exit.
-  -v, -version : Display version information and exit.
+  -cc       : Client command that will be executed.
+
+  -cn       : Client name(s) those will be connected.
+              Use comma (,) for multi-client.
+
+  -cg       : Client group name(s) those will be connected. 
+              Use comma (,) for multi-group.
+
+  -pc       : Pipe configuration file. Default; pipe.json
+
+  -help     : Display help and exit.
+  -h
+
+  -version  : Display version information and exit.
+  -v
 ```
 
 #### Examples

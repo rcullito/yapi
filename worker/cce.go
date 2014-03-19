@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/cmfatih/yapi/client"
+	"sync"
 )
 
 var (
@@ -41,13 +42,11 @@ func (wCCE *cceWorker) SetOptions(workerOpts WorkerOptions) error {
 	cceOpts = workerOpts.Putty.(CCEOptions)
 
 	if cceOpts.Clients == nil {
-		return errors.New("clients option is missing")
+		return errors.New("there is no any client")
 	} else if cceOpts.Cmd == "" {
 		return errors.New("command is missing")
 	} else if cceOpts.Method == "" || cceMethods[cceOpts.Method] != true {
 		return errors.New("invalid method option (" + cceOpts.Method + ")")
-	} else if cceOpts.Method == "parallel" {
-		return errors.New("parallel method is still under development...")
 	}
 
 	wCCE.options = cceOpts
@@ -63,33 +62,49 @@ func (wCCE *cceWorker) Start() error {
 		return errors.New("there is no client to work on")
 	}
 
-	// Init channels
-	cliCnt := len(wCCE.options.Clients)
-	cliList := make(chan string, cliCnt)
-	jobDone := make(chan bool)
+	// Init vars
+	chann := make(chan bool)
 
-	go func() {
-		for {
-			name, more := <-cliList
-			if more {
+	if wCCE.options.Method == "serial" {
+
+		// Launch the goroutine
+		go func() {
+			for _, name := range wCCE.options.Clients {
 				if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
 					if wCCE.options.CmdErrPrint == true {
 						fmt.Println("Failed to execute the command: " + err.Error())
 					}
 				}
-			} else {
-				jobDone <- true
-				return
 			}
-		}
-	}()
+			chann <- true
+		}()
+	} else if wCCE.options.Method == "parallel" {
+		// Init sync
+		wg := new(sync.WaitGroup)
+		cliCnt := len(wCCE.options.Clients)
+		wg.Add(cliCnt)
 
-	for _, name := range wCCE.options.Clients {
-		cliList <- name
+		// Launch the goroutine
+		go func() {
+
+			for i := 0; i < cliCnt; i++ {
+				go func(cliName string) {
+					err := client.ExecCmd(wCCE.options.Cmd, cliName)
+					if err != nil {
+						if wCCE.options.CmdErrPrint == true {
+							fmt.Println("Failed to execute the command: " + err.Error())
+						}
+					}
+
+					wg.Done()
+				}(wCCE.options.Clients[i])
+			}
+			wg.Wait()
+			chann <- true
+		}()
 	}
-	close(cliList)
 
-	<-jobDone
+	<-chann
 
 	return nil
 }

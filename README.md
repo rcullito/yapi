@@ -10,39 +10,23 @@ Currently it can execute remote system commands using ssh protocol. See [example
 For your information; yapi is **still** under heavy development. 
 Feedbacks and pull requests are welcome.  
 
--
-![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")
--
-
 ### Installation
 
 #### From binary distributions
 
-* Linux : [
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) |
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) ]
-* Mac OSX : [
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) ]
-* FreeBSD : [
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) |
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) ]
-* Windows 8/7/Vista/XP : [ 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) ]
+| Linux | Mac OSX | FreeBSD | Windows | Source |
+|:---:|:---:|:---:|:---:|:---:|
+| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) |
+| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) | | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) | | |
 
-For previous versions see [releases](https://github.com/cmfatih/yapi/releases)
+Latest release **v0.3.1** - see [releases](https://github.com/cmfatih/yapi/releases)
 
 #### From source
 
-For HEAD version
-
 ```
 git clone https://github.com/cmfatih/yapi.git
-cd yapi/
-go build yapi.go
+cd yapi/ && go build yapi.go
 ```
 
 ### Usage
@@ -53,6 +37,10 @@ go build yapi.go
   See [config](#config)  
 * Add the path of yapi binary file to the `PATH` environment variable or 
   use `./yapi` on Unix-like systems.
+
+-
+![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")
+-
 
 #### Help
 
@@ -148,13 +136,7 @@ yapi -cc="wc -w" < README.md
 
 yapi checks `-pc` option or `pipe.json` file in the current working directory 
 for pipe configuration file. Pipe configuration file contains information about 
-clients which is used for remote system connections.  
-
-Currently only ssh protocol is supported. For ssh clients; `address` and `username` 
-should be defined. `password` and `keyfile` are optional and can be used individually 
-or together.
-
-Here is the default `pipe.json` file.
+clients which is used for remote system connections. Here is the default `pipe.json` file.
 
 ```
 {
@@ -174,6 +156,16 @@ Here is the default `pipe.json` file.
   ]
 }
 ```
+
+For ssh clients; `address` and `username` should be defined. `password` and `keyfile` are optional 
+and can be used individually or together.  
+
+If you want to use a PuTTY key (`.ppk`) then you have to 
+[convert](https://www.google.com/search?q=how+to+convert+ppk+to+id_rsa) it to an OpenSSH key. 
+Simply you can use `puttygen YOURKEYFILE.ppk -o id_rsa -O private-openssh` command.
+If you get a `structure error` message due key file then please do not use `.ppk` key file.
+Create your own SSH keys. See 
+[How To Set Up SSH Keys](https://www.digitalocean.com/community/articles/how-to-set-up-ssh-keys--2)
 
 ### Notes
 

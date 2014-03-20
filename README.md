@@ -29,9 +29,7 @@ git clone https://github.com/cmfatih/yapi.git
 cd yapi/ && go build yapi.go
 ```
 
-### Usage
-
-#### Getting started
+### Getting started
 
 * Do not forget to make necessary changes in `pipe.json` file before use `yapi` 
   See [config](#config)  
@@ -41,6 +39,8 @@ cd yapi/ && go build yapi.go
 -
 ![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")
 -
+
+### Usage
 
 #### Help
 

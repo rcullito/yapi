@@ -5,6 +5,10 @@
 ```
 ```
 
+### 0.3.1 (2014-03-20)
+
+* Misc. updates
+
 ### 0.3.0 (2014-03-19)
 
 * Update for flags, options, examples

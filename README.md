@@ -19,19 +19,19 @@ Feedbacks and pull requests are welcome.
 #### From binary distributions
 
 * Linux : [
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-linux-amd64.tar.gz) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-linux-386.tar.gz) |
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-linux-arm.tar.gz) ]
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) |
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) ]
 * Mac OSX : [
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-darwin-amd64.tar.gz) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-darwin-386.tar.gz) ]
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) ]
 * FreeBSD : [
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-freebsd-amd64.tar.gz) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-freebsd-386.tar.gz) |
-  [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-freebsd-arm.tar.gz) ]
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) |
+  [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) ]
 * Windows 8/7/Vista/XP : [ 
-  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-windows-amd64.zip) |
-  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.0/yapi-windows-386.zip) ]
+  [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) |
+  [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) ]
 
 For previous versions see [releases](https://github.com/cmfatih/yapi/releases)
 

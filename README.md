@@ -94,7 +94,7 @@ It loads `pipe.json` file in the current working directory. Determine the client
 
 ##### Example 2
 ```
-yapi -pc /path/pipe.json -cc "tail -F /var/log/syslog" -ccem parallel
+yapi -cc "tail -F /var/log/syslog" -ccem parallel
 ```
 It loads `/path/pipe.json`, tails `/var/log/syslog` file on the remote system and 
 wait until the host process exit.

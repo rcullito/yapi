@@ -62,41 +62,56 @@ func (wCCE *cceWorker) Start() error {
 		return errors.New("there is no client to work on")
 	}
 
+	// Because of the ssh pkg; these code block is the best approach so far.
+	// A channel, a wait group and goroutines.
+	// Be careful and test it well during implement timeout stuff.
+
+	// Init sync
+	chann := make(chan bool)
+	wg := new(sync.WaitGroup)
+	cliCnt := len(wCCE.options.Clients)
+	wg.Add(cliCnt)
+
 	if wCCE.options.Method == "serial" {
 
 		// TODO: Implement timeout
 
-		for _, name := range wCCE.options.Clients {
-			if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
-				if wCCE.options.CmdErrPrint == true {
-					fmt.Println("Failed to execute the command: " + err.Error())
-				}
-			}
-		}
-	} else if wCCE.options.Method == "parallel" {
-
-		// TODO: Implement timeout
-
-		// Init sync
-		wg := new(sync.WaitGroup)
-		cliCnt := len(wCCE.options.Clients)
-		wg.Add(cliCnt)
-
-		// Launch the goroutines
-		for i := 0; i < cliCnt; i++ {
-			go func(cliName string) {
-				err := client.ExecCmd(wCCE.options.Cmd, cliName)
-				if err != nil {
+		go func() {
+			for _, name := range wCCE.options.Clients {
+				if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
 					if wCCE.options.CmdErrPrint == true {
 						fmt.Println("Failed to execute the command: " + err.Error())
 					}
 				}
-
 				wg.Done()
-			}(wCCE.options.Clients[i])
-		}
-		wg.Wait()
+			}
+			chann <- true
+		}()
+
+	} else if wCCE.options.Method == "parallel" {
+
+		// TODO: Implement timeout
+
+		go func() {
+			for i := 0; i < cliCnt; i++ {
+				go func(cliName string) {
+					err := client.ExecCmd(wCCE.options.Cmd, cliName)
+					if err != nil {
+						if wCCE.options.CmdErrPrint == true {
+							fmt.Println("Failed to execute the command: " + err.Error())
+						}
+					}
+
+					wg.Done()
+				}(wCCE.options.Clients[i])
+			}
+			chann <- true
+		}()
 	}
+
+	wg.Wait()
+
+	<-chann
 
 	return nil
 }

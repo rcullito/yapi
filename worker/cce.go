@@ -62,48 +62,41 @@ func (wCCE *cceWorker) Start() error {
 		return errors.New("there is no client to work on")
 	}
 
-	// Init vars
-	chann := make(chan bool)
-
 	if wCCE.options.Method == "serial" {
-		// Launch the goroutine
-		go func() {
-			for _, name := range wCCE.options.Clients {
-				if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
-					if wCCE.options.CmdErrPrint == true {
-						fmt.Println("Failed to execute the command: " + err.Error())
-					}
+
+		// TODO: Implement timeout
+
+		for _, name := range wCCE.options.Clients {
+			if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
+				if wCCE.options.CmdErrPrint == true {
+					fmt.Println("Failed to execute the command: " + err.Error())
 				}
 			}
-			chann <- true
-		}()
+		}
 	} else if wCCE.options.Method == "parallel" {
+
+		// TODO: Implement timeout
+
 		// Init sync
 		wg := new(sync.WaitGroup)
 		cliCnt := len(wCCE.options.Clients)
 		wg.Add(cliCnt)
 
-		// Launch the goroutine
-		go func() {
-
-			for i := 0; i < cliCnt; i++ {
-				go func(cliName string) {
-					err := client.ExecCmd(wCCE.options.Cmd, cliName)
-					if err != nil {
-						if wCCE.options.CmdErrPrint == true {
-							fmt.Println("Failed to execute the command: " + err.Error())
-						}
+		// Launch the goroutines
+		for i := 0; i < cliCnt; i++ {
+			go func(cliName string) {
+				err := client.ExecCmd(wCCE.options.Cmd, cliName)
+				if err != nil {
+					if wCCE.options.CmdErrPrint == true {
+						fmt.Println("Failed to execute the command: " + err.Error())
 					}
+				}
 
-					wg.Done()
-				}(wCCE.options.Clients[i])
-			}
-			wg.Wait()
-			chann <- true
-		}()
+				wg.Done()
+			}(wCCE.options.Clients[i])
+		}
+		wg.Wait()
 	}
-
-	<-chann
 
 	return nil
 }

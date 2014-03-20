@@ -62,7 +62,7 @@ func (wCCE *cceWorker) Start() error {
 		return errors.New("there is no client to work on")
 	}
 
-	// Because of the ssh pkg; these code block is the best approach so far.
+	// Because of the ssh pkg; this code block is the best approach so far.
 	// A channel, a wait group and goroutines.
 	// Be careful and test it well during implement timeout stuff.
 

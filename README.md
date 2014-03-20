@@ -129,6 +129,21 @@ yapi -cc hostname -cg group1 -ccem parallel
 It executes `hostname` command on the **remote systems** which are part of the
 `group1` group, and displays output on the **host system**.
 
+##### Examples for stdin
+```
+// Unix-like systems
+ls | yapi -cc="wc -l"
+echo hello | yapi -cc="wc -c"
+yapi -cc="wc -w" < README.md
+yapi -cc="wc -w" << EOF
+yapi -cc="wc -c" <<< hello
+
+// Windows
+dir | yapi -cc="wc -l"
+echo hello | yapi -cc="wc -c"
+yapi -cc="wc -w" < README.md
+```
+
 #### Config
 
 yapi checks `-pc` option or `pipe.json` file in the current working directory 

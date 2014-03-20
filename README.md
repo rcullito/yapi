@@ -14,11 +14,11 @@ Feedbacks and pull requests are welcome.
 
 #### From binary distributions
 
-| Linux | Mac OSX | FreeBSD | Windows | Source |
-|:---:|:---:|:---:|:---:|:---:|
-| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) |
-| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) |
-| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) | | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) | | |
+| Linux | Mac OSX | FreeBSD | Windows | Source | Android |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
+| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) | - | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) | - | - | [arm](#android) |
 
 Latest release **v0.3.1** - see [releases](https://github.com/cmfatih/yapi/releases)
 
@@ -166,6 +166,20 @@ Simply you can use `puttygen YOURKEYFILE.ppk -o id_rsa -O private-openssh` comma
 If you get a `structure error` message due key file then please do not use `.ppk` key file.
 Create your own SSH keys. See 
 [How To Set Up SSH Keys](https://www.digitalocean.com/community/articles/how-to-set-up-ssh-keys--2)
+
+#### Android
+
+Yapi works on Android systems;
+
+1. You need [Android Debug Bridge](http://developer.android.com/tools/help/adb.html)
+2. Extract the latest Linux arm binary ([yapi-linux-arm.tar.gz](https://github.com/cmfatih/yapi/releases)) 
+   release file into a folder.
+3. Push the files to the device;
+   `adb push yapi /data/local/tmp/` and `adb push pipe.json /data/local/tmp/`
+4. Connect to the device; `adb shell`
+5. Go to the folder; `cd /data/local/tmp`
+6. Change the file mode; `chmod 751 yapi`
+7. `./yapi --help`
 
 ### Notes
 

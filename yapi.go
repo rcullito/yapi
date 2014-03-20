@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	YAPI_VERSION = "0.3.0" // app version
+	YAPI_VERSION = "HEAD^0.3.0" // app version
 )
 
 var (
@@ -158,7 +158,7 @@ func cmdUsage() {
 	fmt.Printf("\nExamples:")
 	fmt.Print(`
   yapi -cc ls
-  yapi -pc /path/pipe.json -cc "tail -f /var/log/syslog"
+  yapi -pc /path/pipe.json -cc "tail -F /var/log/syslog" -ccem parallel
   yapi -cc "top -b -n 1" | grep ssh
   yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
   yapi -cc hostname -cn "client1,client2" -ccem parallel

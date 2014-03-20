@@ -108,7 +108,7 @@ func (cliSSH *sshClient) SetAuth(cliAuth ClientAuth) error {
 	// Key file
 	if cliAuth.Keyfile != "" {
 		if err := ck.loadPEM(cliAuth.Keyfile); err != nil {
-			return errors.New("key file couldn't be read: " + cliAuth.Keyfile)
+			return errors.New("key file couldn't be read: " + cliAuth.Keyfile + " - " + err.Error())
 		}
 	}
 

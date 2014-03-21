@@ -17,6 +17,8 @@ import (
 	"io/ioutil"
 	"net"
 	"os"
+	"os/user"
+	"runtime"
 	"strings"
 )
 
@@ -104,6 +106,27 @@ func (cliSSH *sshClient) SetAuth(cliAuth ClientAuth) error {
 
 	// Check and set auth
 	ck := new(sshCK)
+
+	// Determine the username
+	// For SSH protocol username is required. So try to determine it if possible.
+	if cliAuth.Username == "" {
+
+		// WARN: It doesn't work on OSX if the cross compiler used
+
+		if u, err := user.Current(); err == nil && u != nil {
+			if u.Username != "" {
+				if runtime.GOOS == "windows" {
+					sli := strings.Split(u.Username, "\\")
+					sliLen := len(sli)
+					if sliLen > 0 {
+						cliAuth.Username = sli[sliLen-1]
+					}
+				} else {
+					cliAuth.Username = u.Username
+				}
+			}
+		}
+	}
 
 	// Key file
 	if cliAuth.Keyfile != "" {

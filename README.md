@@ -12,17 +12,21 @@ Feedbacks and pull requests are welcome.
 
 ### Installation
 
-#### From binary distributions
+#### Binary distributions
 
-| Linux | Mac OSX | FreeBSD | Windows | Source | Android |
+| Linux | Windows | Mac OSX | FreeBSD | Source | Android |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
-| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
-| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) | - | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) | - | - | [arm](#android) |
+| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
+| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) | - | - | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) | - | [arm](#android) |
 
 Latest release **v0.3.1** - see [releases](https://github.com/cmfatih/yapi/releases)
 
-#### From source
+#### Source
+
+[Download the Go distribution](http://golang.org/doc/install) 
+or 
+[compile Go](http://golang.org/doc/install/source)
 
 ```
 git clone https://github.com/cmfatih/yapi.git

@@ -26,7 +26,7 @@ Latest release **v0.3.1** - see [releases](https://github.com/cmfatih/yapi/relea
 
 [Download the Go distribution](http://golang.org/doc/install) 
 or 
-[compile Go](http://golang.org/doc/install/source)
+[compile the Go source](http://golang.org/doc/install/source)
 
 ```
 git clone https://github.com/cmfatih/yapi.git

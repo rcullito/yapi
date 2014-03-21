@@ -73,63 +73,67 @@ cd yapi/ && go build yapi.go
 
 #### Examples
 
-##### Example 1
 ```
 yapi -cc ls
 ```
-It loads `pipe.json` file in the current working directory. Determine the client by 
-`isDefault` value, executes `ls` command on the remote system and displays output.
+It loads `pipe.json` file in the current working directory. Determine the client by `isDefault` value, 
+executes `ls` command on the remote system and displays output.
 
-##### Example 2
-```
-yapi -cc "tail -F /var/log/syslog" -ccem parallel
-```
-It loads `/path/pipe.json`, tails `/var/log/syslog` file on the remote system and 
-wait until the host process exit.
+-
 
-##### Example 3
 ```
 yapi -cc "top -b -n 1" | grep ssh
 ```
-It executes `top -b -n 1` command on the **remote system**,
-transfer result to the **host system**, executes `grep ssh` on the **host system** 
-and displays output.
+It executes `top -b -n 1` command on the **remote system**,transfer result to the **host system**, 
+executes `grep ssh` on the **host system** and displays output.
 
-##### Example 4
-```
-yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
-```
-It executes `ps aux` command on the **remote system** `client1`,
-transfer result to the **remote system** `client2`, counts the lines (`wc -l`)
-and displays output on the **host system**.
+-
 
-##### Example 5
+```
+yapi -cc "tail -F /var/log/syslog" -ccem parallel
+```
+It tails `/var/log/syslog` file on the remote system and wait until the host process exit.
+
+-
+
 ```
 yapi -cc hostname -cn "client1,client2" -ccem parallel
 ```
 It executes `hostname` command on the **remote systems** `client1` and `client2`,
 and displays output on the **host system**.
 
-##### Example 6
+-
+
 ```
 yapi -cc hostname -cg group1 -ccem parallel
 ```
-It executes `hostname` command on the **remote systems** which are part of the
-`group1` group, and displays output on the **host system**.
+It executes `hostname` command on the **remote systems** which are part of the `group1` group, 
+and displays output on the **host system**.
+
+-
+
+```
+yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
+```
+It executes `ps aux` command on the **remote system** `client1`, 
+transfer result to the **remote system** `client2`, counts the lines (`wc -l`)
+and displays output on the **host system**.
+
+-
 
 ##### Examples for stdin
 ```
 // Unix-like systems
-ls | yapi -cc="wc -l"
-echo hello | yapi -cc="wc -c"
-yapi -cc="wc -w" < README.md
-yapi -cc="wc -w" << EOF
-yapi -cc="wc -c" <<< hello
+ls | yapi -cc "wc -l"
+echo hello | yapi -cc "wc -c"
+yapi -cc "wc -w" < README.md
+yapi -cc "wc -w" << EOF
+yapi -cc "wc -c" <<< hello
 
 // Windows
-dir | yapi -cc="wc -l"
-echo hello | yapi -cc="wc -c"
-yapi -cc="wc -w" < README.md
+dir | yapi -cc "wc -l"
+echo hello | yapi -cc "wc -c"
+yapi -cc "wc -w" < README.md
 ```
 
 #### Config

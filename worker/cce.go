@@ -42,11 +42,11 @@ func (wCCE *cceWorker) SetOptions(workerOpts WorkerOptions) error {
 	cceOpts = workerOpts.Putty.(CCEOptions)
 
 	if cceOpts.Clients == nil {
-		return errors.New("there is no any client")
+		return errors.New("there is no any client to use")
 	} else if cceOpts.Cmd == "" {
-		return errors.New("command is missing")
+		return errors.New("missing client command")
 	} else if cceOpts.Method == "" || cceMethods[cceOpts.Method] != true {
-		return errors.New("invalid method option (" + cceOpts.Method + ")")
+		return errors.New("invalid client command execution method (" + cceOpts.Method + ")")
 	}
 
 	wCCE.options = cceOpts
@@ -80,7 +80,7 @@ func (wCCE *cceWorker) Start() error {
 			for _, name := range wCCE.options.Clients {
 				if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
 					if wCCE.options.CmdErrPrint == true {
-						fmt.Println("Failed to execute the command: " + err.Error())
+						fmt.Println("failed to execute the command: " + err.Error())
 					}
 				}
 				wg.Done()
@@ -98,7 +98,7 @@ func (wCCE *cceWorker) Start() error {
 					err := client.ExecCmd(wCCE.options.Cmd, cliName)
 					if err != nil {
 						if wCCE.options.CmdErrPrint == true {
-							fmt.Println("Failed to execute the command: " + err.Error())
+							fmt.Println("failed to execute the command: " + err.Error())
 						}
 					}
 
@@ -107,6 +107,10 @@ func (wCCE *cceWorker) Start() error {
 			}
 			chann <- true
 		}()
+	} else {
+		if wCCE.options.CmdErrPrint == true {
+			fmt.Println("invalid client command execution method: " + wCCE.options.Method)
+		}
 	}
 
 	wg.Wait()

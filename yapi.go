@@ -13,12 +13,13 @@ import (
 	"github.com/cmfatih/yapi/pipe"
 	"github.com/cmfatih/yapi/worker"
 	"os"
+	"os/user"
 	"runtime"
 	"strings"
 )
 
 const (
-	YAPI_VERSION = "0.3.2" // app version
+	YAPI_VERSION = "0.3.2^HEAD" // app version
 )
 
 var (
@@ -29,12 +30,13 @@ var (
 	gvCliGroups []string  // client groups
 	flHelp      bool      // help flag
 	flVersion   bool      // version flag
+	flDbg       bool      // debug flag
 	flPipeConf  string    // pipe config flag
 	flCliName   string    // client name flag
 	flCliGroup  string    // client group flag
 	flCliCmd    string    // client command flag
-	flCliCEM    string    // client command execution method
-	flSSH       string    // simple ssh client
+	flCliCEM    string    // client command execution method flag
+	flSSH       string    // simple ssh client flag
 )
 
 func init() {
@@ -53,6 +55,7 @@ func init() {
 	flag.BoolVar(&flHelp, "h", false, "Display help and exit.")
 	flag.BoolVar(&flVersion, "version", false, "Display version information and exit.")
 	flag.BoolVar(&flVersion, "v", false, "Display version information and exit.")
+	flag.BoolVar(&flDbg, "dbg", false, "Display the debug information end exit.")
 
 	flag.StringVar(&flCliCmd, "cc", "", "Client command that will be executed.")
 	flag.StringVar(&flCliName, "cn", "", "Client name(s) those will be connected.")
@@ -70,6 +73,7 @@ func main() {
 
 	flagVer(flVersion) // version
 	flagHelp(flHelp)   // help
+	flagDbg(flDbg)     // debug
 
 	if flSSH != "" {
 		// Simple SSH CCE
@@ -126,6 +130,7 @@ func flagHelp(help bool) {
     -h
     -version  : Display version information and exit.
     -v
+    -dbg      : Display the debug information end exit.
 
   Examples:
     yapi -cc ls
@@ -143,6 +148,30 @@ func flagHelp(help bool) {
   Please report issues to https://github.com/cmfatih/yapi/issues
 
   `)
+
+	flagExit()
+}
+
+// flagDbg displays the version information and exit.
+func flagDbg(dbg bool) {
+
+	if dbg != true {
+		return
+	}
+
+	// Init vars
+	username := ""
+	if u, err := user.Current(); err != nil {
+		username = err.Error()
+	} else {
+		username = u.Username
+	}
+
+	fmt.Print("yapi debug:\n\n")
+
+	fmt.Printf("  version       : %s\n", YAPI_VERSION)
+	fmt.Printf("  username      : %s\n", username)
+	fmt.Printf("  home          : %s\n", gvHOME)
 
 	flagExit()
 }

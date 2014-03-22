@@ -22,9 +22,9 @@ Feedbacks and pull requests are welcome.
 
 Latest release **v0.3.2** - see [releases](https://github.com/cmfatih/yapi/releases)
 
-Binary files compiled on Linux with Go cross compiling support.
-So Mac OSX and FreeBSD binary files might have issues (due cgo) in some cases. 
-Please [compile](#compile-source) your own yapi binary if you have Go on your system.
+Binary files compiled on Linux (64bit) with Go cross compiling support. 
+Please [compile](#compile-source) your own yapi binary if you have Go on your system. 
+See [known issues](#known-issues)
 
 #### Compile source
 
@@ -214,6 +214,13 @@ Yapi works on Android systems;
 * For issues see [Issues](https://github.com/cmfatih/yapi/issues)
 * For coding and design goals see [CODING.md](https://github.com/cmfatih/yapi/blob/master/CODING.md)
 * For all notable references see [REFERENCES.md](https://github.com/cmfatih/yapi/blob/master/REFERENCES.md)
+
+### Known Issues
+
+* yapi detects current username (if it is undefined) for SSH clients. But current yapi binaries
+  are compiled on Linux (64bit) with Go cross compiling support so some platforms have issue (due cgo)
+  with username detection. Please build your own yapi binary if you are using; Mac OSX or FreeBSD  
+  For more details see [golang issue 6376](https://code.google.com/p/go/issues/detail?id=6376)
 
 ### Changelog
 

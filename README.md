@@ -19,13 +19,12 @@ Latest release **v0.3.2** - see all [releases](https://github.com/cmfatih/yapi/r
 | Linux | Windows | Mac OSX | Source | Android |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-amd64.tar.gz)* | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
-| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-386.zip)* | - | [zip](https://github.com/cmfatih/yapi/archive/v0.3.2.zip)* | - |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-386.zip) | - | [zip](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
 | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-arm.tar.gz)* | - | - | - | [arm](#android) |
 
-The binary files marked with `*` are compiled on Linux (64bit) with Go cross compiling support. 
-Please [compile](#compile-source) your own yapi binary for better performance if you are targeting
-those platforms.
-See [known issues](#known-issues)
+The binary files marked with `*` are compiled on Linux (64bit) with golang cross compiling support. 
+Please [compile](#compile-source) your own yapi binary for consistency and better performance
+if you are targeting those platforms. Also see [known issues](#known-issues)
 
 #### Compile source
 
@@ -212,19 +211,22 @@ Yapi works on Android systems;
 6. Change the file mode; `chmod 751 yapi`
 7. `./yapi --help`
 
+### Known Issues
+
+* The yapi binary files for; `Linux 32bit`, `Linux arm` and `Mac OSX 64bit` 
+  are compiled on Linux (64bit) with golang cross compiling support. Please compile your own yapi binary 
+  for consistency and better performance. For more details about cross compiling issues 
+  see [golang issue 6376](https://code.google.com/p/go/issues/detail?id=6376)
+
+* (cross compiling issue) yapi detects current username (if it is undefined) for SSH clients. 
+  If you want to use this feature and you are using `Mac OSX` or `Linux (32bit or arm)` 
+  please build your own yapi binary.
+
 ### Notes
 
 * For issues see [Issues](https://github.com/cmfatih/yapi/issues)
 * For coding and design goals see [CODING.md](https://github.com/cmfatih/yapi/blob/master/CODING.md)
 * For all notable references see [REFERENCES.md](https://github.com/cmfatih/yapi/blob/master/REFERENCES.md)
-
-### Known Issues
-
-* yapi detects current username (if it is undefined) for SSH clients. But some of the yapi binaries
-  are compiled on Linux (64bit) with Go cross compiling support so some platforms have issue (due cgo)
-  with username detection. Please build your own yapi binary if you are using; 
-  Mac OSX, Linux (32bit)
-  For more details see [golang issue 6376](https://code.google.com/p/go/issues/detail?id=6376)
 
 ### Changelog
 

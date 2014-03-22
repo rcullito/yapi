@@ -121,7 +121,7 @@ and displays output on the **host system**.
 -
 
 ```
-yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
+yapi -cc "ps aux" -cn client1 | yapi -cc "wc -l" -cn client2
 ```
 It executes `ps aux` command on the **remote system** `client1`, 
 transfer result to the **remote system** `client2`, counts the lines (`wc -l`)

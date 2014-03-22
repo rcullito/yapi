@@ -16,11 +16,11 @@ Feedbacks and pull requests are welcome.
 
 | Linux | Windows | Mac OSX | FreeBSD | Source | Android |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-amd64.tar.gz) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
-| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-windows-386.zip) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-386.tar.gz) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.1.zip) | - |
-| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-linux-arm.tar.gz) | - | - | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.1/yapi-freebsd-arm.tar.gz) | - | [arm](#android) |
+| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-amd64.tar.gz) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-386.zip) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-386.tar.gz) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
+| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-arm.tar.gz) | - | - | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-arm.tar.gz) | - | [arm](#android) |
 
-Latest release **v0.3.1** - see [releases](https://github.com/cmfatih/yapi/releases)
+Latest release **v0.3.2** - see [releases](https://github.com/cmfatih/yapi/releases)
 
 Binary files compiled on Linux with Go cross compiling support.
 So Mac OSX and FreeBSD binary files might have issues (due cgo) in some cases. 

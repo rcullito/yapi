@@ -3,10 +3,13 @@
 ### HEAD
 
 ```
+```
+
+### 0.3.2 (2014-03-22)
+
 * -ssh option (issue #11)
 * Private key file detection for ssh clients (issue #10)
 * Username detection for ssh clients (issue #6)
-```
 
 ### 0.3.1 (2014-03-20)
 

@@ -39,7 +39,7 @@ then
   echo "Preparing binary files..."
 
   # Unix-like systems
-  FILES="yapi-darwin-386 yapi-darwin-amd64 yapi-freebsd-386 yapi-freebsd-amd64 yapi-freebsd-arm yapi-linux-386 yapi-linux-amd64 yapi-linux-arm"
+  FILES="yapi-linux-amd64 yapi-linux-386 yapi-linux-arm yapi-darwin-amd64"
 
   for FILE in $FILES; do
     rm -rf yapi/
@@ -54,7 +54,7 @@ then
   rm -rf yapi/
 
   # Windows
-  FILES="yapi-windows-386 yapi-windows-amd64"
+  FILES="yapi-windows-amd64 yapi-windows-386"
 
   for FILE in $FILES; do
     rm -rf yapi/

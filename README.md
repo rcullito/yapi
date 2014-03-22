@@ -19,11 +19,12 @@ Latest release **v0.3.2** - see all [releases](https://github.com/cmfatih/yapi/r
 | Linux | Windows | Mac OSX | Source | Android |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-amd64.tar.gz)* | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
-| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-386.zip)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-386.tar.gz)* | [zip](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-386.zip)* | - | [zip](https://github.com/cmfatih/yapi/archive/v0.3.2.zip)* | - |
 | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-arm.tar.gz)* | - | - | - | [arm](#android) |
 
 The binary files marked with `*` are compiled on Linux (64bit) with Go cross compiling support. 
-Please [compile](#compile-source) your own yapi binary for better performance.
+Please [compile](#compile-source) your own yapi binary for better performance if you are targeting
+those platforms.
 See [known issues](#known-issues)
 
 #### Compile source

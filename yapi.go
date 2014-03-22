@@ -11,6 +11,7 @@ import (
 	"github.com/cmfatih/yapi/client"
 	"github.com/cmfatih/yapi/pipe"
 	"github.com/cmfatih/yapi/worker"
+	"os"
 	"runtime"
 	"strings"
 )
@@ -22,6 +23,7 @@ const (
 var (
 	gvCLEC        string    // command line escape char
 	gvPipeConf    pipe.Conf // pipe config
+	gvClientNames []string  // client names
 	flHelp        bool      // help flag
 	flVersion     bool      // version flag
 	flPipeConf    string    // pipe config flag
@@ -30,77 +32,6 @@ var (
 	flClientCmd   string    // client command flag
 	flClientCEM   string    // client command execution method
 )
-
-func main() {
-
-	// Check flags
-	flag.Parse()
-
-	if flVersion == true {
-		cmdVer()
-		return
-	} else if flHelp == true || flClientCmd == "" {
-		cmdUsage()
-		return
-	}
-
-	// Init the pipe config
-	err := gvPipeConf.Load(flPipeConf)
-	if err != nil {
-		fmt.Printf("Failed to load pipe configuration: %s", err)
-		return
-	} else if gvPipeConf.IsLoaded() == false {
-		fmt.Printf("Failed to load pipe configuration. Please use [-pc FILE] option.")
-		return
-	}
-
-	// Determine the clients
-	cliNames := flagMultiParser(flClientName, ",")
-	cliGroups := flagMultiParser(flClientGroup, ",")
-	if cliNames == nil && cliGroups == nil {
-		if _, cliDefName := gvPipeConf.ClientDef(); cliDefName != "" {
-			cliNames = append(cliNames, cliDefName)
-		}
-	} else if cliGroups != nil {
-		for _, val := range cliGroups {
-			cliList := client.ByGroupName(val)
-			for key, _ := range cliList {
-				cliNames = append(cliNames, cliList[key].Name())
-			}
-		}
-	}
-	if cliNames == nil {
-		fmt.Print("Failed to determine a client. Please use [-cn CLIENTNAME] or [-cg GROUPNAME] option.")
-		return
-	}
-
-	// Execute the client command
-	if flClientCmd != "" {
-		cliCCEM := flagSymbolParser(flClientCEM)
-		if cliCCEM != "serial" && cliCCEM != "parallel" {
-			fmt.Println("Invalid client command execution method. Please use [-ccem serial] or [-ccem parallel]")
-			return
-		}
-
-		ccew, err := worker.New("cce")
-		if err != nil {
-			fmt.Printf("Failed to execute the command: %s\n", err)
-			return
-		}
-		if err := ccew.SetOptions(
-			worker.WorkerOptions{
-				Putty: worker.CCEOptions{Clients: cliNames, Cmd: flClientCmd, CmdErrPrint: true, Method: cliCCEM},
-			},
-		); err != nil {
-			fmt.Printf("Failed to execute the command: %s\n", err)
-			return
-		}
-		if err := ccew.Start(); err != nil {
-			fmt.Printf("Failed to execute the command: %s\n", err)
-			return
-		}
-	}
-}
 
 func init() {
 
@@ -124,57 +55,150 @@ func init() {
 	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file. Default; pipe.json")
 }
 
-// cmdUsage displays the usage of the app
-func cmdUsage() {
+func main() {
+
+	// Init flags
+	flag.Parse()
+
+	flagVersionParser(flVersion)                          // version
+	flagHelpParser(flHelp)                                // help
+	flagPCParser(flPipeConf)                              // pipe config
+	flagCNGParser(flClientName, flClientGroup)            // client names
+	flagCCParser(flClientCmd, flClientCEM, gvClientNames) // client command
+	flagHelpParser(true)                                  // Default
+
+	return
+}
+
+// flagVersionParser displays the version information and exit.
+func flagVersionParser(ver bool) {
+
+	if ver == true {
+		fmt.Printf("yapi version %s\n", YAPI_VERSION)
+		os.Exit(0)
+	}
+
+	return
+}
+
+// flagHelpParser displays the usage and exit.
+func flagHelpParser(help bool) {
+
+	if help != true {
+		return
+	}
+
 	fmt.Print("Usage: yapi [OPTION]...\n\n")
 	fmt.Printf("yapi - Yet Another Pipe Implementation - v%s\n", YAPI_VERSION)
+	fmt.Print(`
+  Options:
+    -cc       : Client command that will be executed.
+    -cn       : Client name(s) those will be connected.
+                Use comma (,) for multi-client.
+    -cg       : Client group name(s) those will be connected. 
+                Use comma (,) for multi-group.
+    -ccem     : Execution method for client command. Default; serial
+                Possible values; serial (~), parallel (//)
 
-	fmt.Printf("\nOptions:")
-	//flag.PrintDefaults()
-	/*
-		flag.VisitAll(func(flg *flag.Flag) {
-			defVal := ""
-			if flg.DefValue != "" && flg.DefValue != "false" {
-				defVal = "(default: " + flg.DefValue + ")"
+    -pc       : Pipe configuration file. Default; pipe.json
+
+    -help     : Display help and exit.
+    -h
+    -version  : Display version information and exit.
+    -v
+
+  Examples:
+    yapi -cc ls
+    yapi -cc "top -b -n 1" | grep ssh
+    yapi -cc "tail -F /var/log/syslog" -ccem parallel
+    yapi -cc hostname -cn "client1,client2" -ccem parallel
+    yapi -cc hostname -cg group1 -ccem parallel
+    yapi -cc "ps aux" -cn client1 | yapi -cc "wc -l" -cn client2
+
+
+  Please report issues to https://github.com/cmfatih/yapi/issues
+
+  `)
+	os.Exit(0)
+
+	return
+}
+
+// flagCCParser parses `-cc` flag.
+func flagCCParser(cc, ccem string, clis []string) {
+
+	if cc == "" {
+		return
+	}
+
+	// Execute the client command
+	ccew, err := worker.New("cce")
+	if err != nil {
+		fmt.Printf("Failed to execute the command: %s\n", err)
+		return
+	}
+	if err := ccew.SetOptions(
+		worker.WorkerOptions{
+			Putty: worker.CCEOptions{
+				Clients:     clis,
+				Cmd:         cc,
+				CmdErrPrint: true,
+				Method:      flagSymbolParser(ccem),
+			},
+		},
+	); err != nil {
+		fmt.Printf("Failed to execute the command: %s\n", err)
+		os.Exit(0)
+	}
+	if err := ccew.Start(); err != nil {
+		fmt.Printf("Failed to execute the command: %s\n", err)
+		os.Exit(0)
+	}
+
+	os.Exit(0)
+
+	return
+}
+
+// flagPCParser parses `-pc` flag.
+func flagPCParser(pc string) {
+
+	err := gvPipeConf.Load(pc)
+	if err != nil {
+		fmt.Printf("Failed to load pipe configuration: %s", err)
+		return
+	} else if gvPipeConf.IsLoaded() == false && pc != "" {
+		fmt.Printf("Failed to load pipe configuration. Please use [-pc FILE] option.")
+		return
+	}
+
+	return
+}
+
+// flagCNGParser parses `-cn` and `-cg` flags and set gvClientNames var.
+func flagCNGParser(cn, cg string) {
+
+	gvClientNames = flagMultiParser(cn, ",")
+	cliGroups := flagMultiParser(cg, ",")
+	if gvClientNames == nil && cliGroups == nil {
+		if _, cliDefName := gvPipeConf.ClientDef(); cliDefName != "" {
+			gvClientNames = append(gvClientNames, cliDefName)
+		}
+	} else if cliGroups != nil {
+		for _, val := range cliGroups {
+			cliList := client.ByGroupName(val)
+			for key, _ := range cliList {
+				gvClientNames = append(gvClientNames, cliList[key].Name())
 			}
-			fmt.Printf("  -%-10s : %s %s\n", flg.Name, flg.Usage, defVal)
-		})
-	*/
-	fmt.Print(`
-  -cc       : Client command that will be executed.
-  -cn       : Client name(s) those will be connected.
-              Use comma (,) for multi-client.
-  -cg       : Client group name(s) those will be connected. 
-              Use comma (,) for multi-group.
-  -ccem     : Execution method for client command. Default; serial
-              Possible values; serial (~), parallel (//)
-  -pc       : Pipe configuration file. Default; pipe.json
-  -help     : Display help and exit.
-  -h
-  -version  : Display version information and exit.
-  -v
-  `)
+		}
+	}
 
-	fmt.Printf("\nExamples:")
-	fmt.Print(`
-  yapi -cc ls
-  yapi -cc "top -b -n 1" | grep ssh
-  yapi -cc "tail -F /var/log/syslog" -ccem parallel
-  yapi -cc hostname -cn "client1,client2" -ccem parallel
-  yapi -cc hostname -cg group1 -ccem parallel
-  yapi -cn client1 -cc "ps aux" | yapi -cn client2 -cc "wc -l"
-  `)
-
-	fmt.Printf("\nPlease report issues to https://github.com/cmfatih/yapi/issues\n")
+	return
 }
 
-// cmdVer displays the version information of the app
-func cmdVer() {
-	fmt.Printf("yapi version %s\n", YAPI_VERSION)
-}
-
-// flagMultiParser parses multiple flag values.
+// flagMultiParser parses multiple flag value.
 func flagMultiParser(flagVal, valSep string) []string {
+
 	if flagVal != "" {
 		var flagVals []string
 		founds := make(map[string]bool)
@@ -193,8 +217,9 @@ func flagMultiParser(flagVal, valSep string) []string {
 	return nil
 }
 
-// flagSymbolParser parses symbol flag values.
+// flagSymbolParser parses symbol flag value.
 func flagSymbolParser(flagVal string) string {
+
 	if flagVal == "~" {
 		return "serial"
 	} else if flagVal == "//" {

@@ -22,7 +22,7 @@ Feedbacks and pull requests are welcome.
 
 Latest release **v0.3.2** - see [releases](https://github.com/cmfatih/yapi/releases)
 
-Binary files compiled on Linux (64bit) with Go cross compiling support. 
+The binary files are compiled on Linux (64bit) with Go cross compiling support. 
 Please [compile](#compile-source) your own yapi binary if you have Go on your system. 
 See [known issues](#known-issues)
 

@@ -14,16 +14,16 @@ Feedbacks and pull requests are welcome.
 
 #### Binary distributions
 
+Latest release **v0.3.2** - see all [releases](https://github.com/cmfatih/yapi/releases)
+
 | Linux | Windows | Mac OSX | FreeBSD | Source | Android |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-amd64.tar.gz) | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
-| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-386.zip) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-386.tar.gz) | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-386.tar.gz) | [zip](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
-| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-arm.tar.gz) | - | - | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-arm.tar.gz) | - | [arm](#android) |
+| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-amd64.tar.gz)* | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-amd64.tar.gz)* | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-windows-386.zip)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-darwin-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-386.tar.gz)* | [zip](https://github.com/cmfatih/yapi/archive/v0.3.2.zip) | - |
+| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-linux-arm.tar.gz)* | - | - | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.2/yapi-freebsd-arm.tar.gz)* | - | [arm](#android) |
 
-Latest release **v0.3.2** - see [releases](https://github.com/cmfatih/yapi/releases)
-
-The binary files are compiled on Linux (64bit) with Go cross compiling support. 
-Please [compile](#compile-source) your own yapi binary if you have Go on your system. 
+The binary files marked with `*` are compiled on Linux (64bit) with Go cross compiling support. 
+Please [compile](#compile-source) your own yapi binary for better performance.
 See [known issues](#known-issues)
 
 #### Compile source
@@ -217,9 +217,10 @@ Yapi works on Android systems;
 
 ### Known Issues
 
-* yapi detects current username (if it is undefined) for SSH clients. But current yapi binaries
+* yapi detects current username (if it is undefined) for SSH clients. But some of the yapi binaries
   are compiled on Linux (64bit) with Go cross compiling support so some platforms have issue (due cgo)
-  with username detection. Please build your own yapi binary if you are using; Mac OSX or FreeBSD  
+  with username detection. Please build your own yapi binary if you are using; 
+  Mac OSX, FreeBSD or Linux (32bit)
   For more details see [golang issue 6376](https://code.google.com/p/go/issues/detail?id=6376)
 
 ### Changelog

@@ -16,8 +16,9 @@ import (
 
 // Conf implements the pipe configuration.
 type Conf struct {
-	isLoaded bool
-	filePath string
+	isLoaded    bool
+	isCliInited bool
+	filePath    string
 
 	Clients       []confClient `json:"clients"`
 	clientDefID   string
@@ -40,14 +41,23 @@ type confClientAuth struct {
 	Keyfile  string `json:"keyfile"`
 }
 
+type LoadOpt struct {
+	CliInit bool
+}
+
 // IsLoaded returns whether the configuration is loaded or not.
 func (conf *Conf) IsLoaded() bool {
 	return conf.isLoaded
 }
 
-// Load loads the configuration file by the given file path.
+// IsCliInited returns whether the client configuration is initialized or not.
+func (conf *Conf) IsCliInited() bool {
+	return conf.isCliInited
+}
+
+// Load loads the configuration by the given file path.
 // Default file path is `pipe.json`.
-func (conf *Conf) Load(filePath string) error {
+func (conf *Conf) Load(filePath string, opt LoadOpt) error {
 
 	// Init vars
 	isDefFile := false
@@ -88,7 +98,49 @@ func (conf *Conf) Load(filePath string) error {
 		return errors.New("failed to parse: " + err.Error())
 	}
 
-	// Init clients
+	conf.isLoaded = true
+	conf.filePath = filePath
+
+	if opt.CliInit == true {
+		if err := conf.CliInit(); err != nil {
+			return errors.New("failed to initialize clients: " + err.Error())
+		}
+	}
+
+	return nil
+}
+
+// Load loads the configuration by the given JSON content.
+func (conf *Conf) LoadJSON(jsonCont string, opt LoadOpt) error {
+
+	// Init vars
+	conf.isLoaded = false
+
+	// Check the content
+	if jsonCont == "" {
+		return errors.New("invalid JSON content")
+	}
+
+	// Parse the content
+	if err := json.Unmarshal([]byte(jsonCont), &conf); err != nil {
+		return errors.New("failed to parse: " + err.Error())
+	}
+
+	conf.isLoaded = true
+
+	if opt.CliInit == true {
+		if err := conf.CliInit(); err != nil {
+			return errors.New("failed to initialize clients: " + err.Error())
+		}
+	}
+
+	return nil
+}
+
+// CliInit initialize the clients.
+func (conf *Conf) CliInit() error {
+
+	// Init vars
 	defCliID := ""
 	defCliName := ""
 
@@ -129,15 +181,15 @@ func (conf *Conf) Load(filePath string) error {
 		}
 	}
 
-	conf.isLoaded = true
-	conf.filePath = filePath
 	conf.clientDefID = defCliID
 	conf.clientDefName = defCliName
+
+	conf.isCliInited = true
 
 	return nil
 }
 
-// ClientDef returns the id and name of the default client if any.
-func (conf *Conf) ClientDef() (string, string) {
+// CliDef returns the id and name of the default client if any.
+func (conf *Conf) CliDef() (string, string) {
 	return conf.clientDefID, conf.clientDefName
 }

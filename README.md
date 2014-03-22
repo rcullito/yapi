@@ -72,6 +72,11 @@ cd yapi/ && go build yapi.go
 
   -pc       : Pipe configuration file. Default; pipe.json
 
+  -ssh      : Simple SSH client command execution.
+              It uses the current/given username and HOME/.ssh/id_rsa 
+              for the private key file.
+              Syntax: [user@]host[:22]
+
   -help     : Display help and exit.
   -h
 
@@ -129,6 +134,16 @@ and displays output on the **host system**.
 
 -
 
+##### Examples for `-ssh` option
+`-ssh` option doesn't require `pipe.json` file. 
+```
+yapi -ssh localhost -cc ls
+yapi -ssh user@localhost:22 -cc ls
+yapi -ssh host1,host2 -cc ls -ccem parallel
+```
+
+-
+
 ##### Examples for stdin
 ```
 // Unix-like systems
@@ -147,7 +162,7 @@ yapi -cc "wc -w" < README.md
 #### Config
 
 yapi checks `-pc` option or `pipe.json` file in the current working directory 
-for pipe configuration file. Pipe configuration file contains information about 
+for the pipe configuration file. The pipe configuration file contains information about 
 clients which is used for remote system connections. Here is the default `pipe.json` file.
 
 ```
@@ -169,15 +184,16 @@ clients which is used for remote system connections. Here is the default `pipe.j
 }
 ```
 
-For ssh clients; `address` and `username` should be defined. `password` and `keyfile` are optional 
-and can be used individually or together.  
+For ssh clients; `name` and `address` should be defined. Address can be `host` or `host:port`
+If `username` is not defined then current user will be used for authentication.
+`password` and `keyfile` are optional and can be used individually or together.  
 
 If you want to use a PuTTY key (`.ppk`) then you have to 
 [convert](https://www.google.com/search?q=how+to+convert+ppk+to+id_rsa) it to an OpenSSH key. 
 Simply you can use `puttygen YOURKEYFILE.ppk -o id_rsa -O private-openssh` command.
 If you get a `structure error` message due key file then please do not use `.ppk` key file.
 Create your own SSH keys. See 
-[How To Set Up SSH Keys](https://www.digitalocean.com/community/articles/how-to-set-up-ssh-keys--2)
+[how](https://www.digitalocean.com/community/articles/how-to-set-up-ssh-keys--2)
 
 #### Android
 

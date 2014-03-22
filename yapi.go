@@ -6,6 +6,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/cmfatih/yapi/client"
@@ -21,16 +22,19 @@ const (
 )
 
 var (
-	gvCLEC        string    // command line escape char
-	gvPipeConf    pipe.Conf // pipe config
-	gvClientNames []string  // client names
-	flHelp        bool      // help flag
-	flVersion     bool      // version flag
-	flPipeConf    string    // pipe config flag
-	flClientName  string    // client name flag
-	flClientGroup string    // client group flag
-	flClientCmd   string    // client command flag
-	flClientCEM   string    // client command execution method
+	gvCLEC      string    // command line escape char
+	gvHOME      string    // User home directory
+	gvPipeConf  pipe.Conf // pipe config
+	gvCliNames  []string  // client names
+	gvCliGroups []string  // client groups
+	flHelp      bool      // help flag
+	flVersion   bool      // version flag
+	flPipeConf  string    // pipe config flag
+	flCliName   string    // client name flag
+	flCliGroup  string    // client group flag
+	flCliCmd    string    // client command flag
+	flCliCEM    string    // client command execution method
+	flSSH       string    // simple ssh client
 )
 
 func init() {
@@ -38,8 +42,10 @@ func init() {
 	// Init vars
 	if runtime.GOOS == "windows" {
 		gvCLEC = "^"
+		gvHOME = os.Getenv("USERPROFILE")
 	} else {
 		gvCLEC = "\\"
+		gvHOME = os.Getenv("HOME")
 	}
 
 	// Init flags
@@ -48,11 +54,13 @@ func init() {
 	flag.BoolVar(&flVersion, "version", false, "Display version information and exit.")
 	flag.BoolVar(&flVersion, "v", false, "Display version information and exit.")
 
-	flag.StringVar(&flClientCmd, "cc", "", "Client command that will be executed.")
-	flag.StringVar(&flClientName, "cn", "", "Client name(s) those will be connected.")
-	flag.StringVar(&flClientGroup, "cg", "", "Client group name(s) those will be connected.")
-	flag.StringVar(&flClientCEM, "ccem", "serial", "Execution method for client command. Default; serial")
+	flag.StringVar(&flCliCmd, "cc", "", "Client command that will be executed.")
+	flag.StringVar(&flCliName, "cn", "", "Client name(s) those will be connected.")
+	flag.StringVar(&flCliGroup, "cg", "", "Client group name(s) those will be connected.")
+	flag.StringVar(&flCliCEM, "ccem", "serial", "Execution method for client command. Default; serial")
 	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file. Default; pipe.json")
+
+	flag.StringVar(&flSSH, "ssh", "", "Simple SSH client command execution.")
 }
 
 func main() {
@@ -60,29 +68,36 @@ func main() {
 	// Init flags
 	flag.Parse()
 
-	flagVersionParser(flVersion)                          // version
-	flagHelpParser(flHelp)                                // help
-	flagPCParser(flPipeConf)                              // pipe config
-	flagCNGParser(flClientName, flClientGroup)            // client names
-	flagCCParser(flClientCmd, flClientCEM, gvClientNames) // client command
-	flagHelpParser(true)                                  // Default
+	flagVer(flVersion) // version
+	flagHelp(flHelp)   // help
 
-	return
-}
-
-// flagVersionParser displays the version information and exit.
-func flagVersionParser(ver bool) {
-
-	if ver == true {
-		fmt.Printf("yapi version %s\n", YAPI_VERSION)
-		os.Exit(0)
+	if flSSH != "" {
+		// Simple SSH CCE
+		flagSSH(flSSH, flCliCmd, flCliCEM)
+	} else if flCliCmd != "" {
+		// Client command execution
+		flagPC(flPipeConf)                     // pipe config
+		flagCNG(flCliName, flCliGroup)         // client names and groups
+		flagCC(flCliCmd, flCliCEM, gvCliNames) // client command
 	}
 
-	return
+	flagHelp(true) // Default
 }
 
-// flagHelpParser displays the usage and exit.
-func flagHelpParser(help bool) {
+// flagVer displays the version information and exit.
+func flagVer(ver bool) {
+
+	if ver != true {
+		return
+	}
+
+	fmt.Printf("yapi version %s\n", YAPI_VERSION)
+
+	flagExit()
+}
+
+// flagHelp displays the help and exit.
+func flagHelp(help bool) {
 
 	if help != true {
 		return
@@ -102,6 +117,11 @@ func flagHelpParser(help bool) {
 
     -pc       : Pipe configuration file. Default; pipe.json
 
+    -ssh      : Simple SSH client command execution.
+                It uses the current/given username and HOME/.ssh/id_rsa 
+                for the private key file.
+                Syntax: [user@]host[:22]
+
     -help     : Display help and exit.
     -h
     -version  : Display version information and exit.
@@ -115,85 +135,140 @@ func flagHelpParser(help bool) {
     yapi -cc hostname -cg group1 -ccem parallel
     yapi -cc "ps aux" -cn client1 | yapi -cc "wc -l" -cn client2
 
+    yapi -ssh localhost -cc ls
+    yapi -ssh user@localhost:22 -cc ls
+    yapi -ssh host1,host2 -cc ls -ccem parallel
+
 
   Please report issues to https://github.com/cmfatih/yapi/issues
 
   `)
-	os.Exit(0)
 
-	return
+	flagExit()
 }
 
-// flagCCParser parses `-cc` flag.
-func flagCCParser(cc, ccem string, clis []string) {
+// flagPC loads pipe config.
+func flagPC(pcFile string) {
 
-	if cc == "" {
-		return
-	}
-
-	// Execute the client command
-	ccew, err := worker.New("cce")
-	if err != nil {
-		fmt.Printf("Failed to execute the command: %s\n", err)
-		return
-	}
-	if err := ccew.SetOptions(
-		worker.WorkerOptions{
-			Putty: worker.CCEOptions{
-				Clients:     clis,
-				Cmd:         cc,
-				CmdErrPrint: true,
-				Method:      flagSymbolParser(ccem),
-			},
-		},
-	); err != nil {
-		fmt.Printf("Failed to execute the command: %s\n", err)
-		os.Exit(0)
-	}
-	if err := ccew.Start(); err != nil {
-		fmt.Printf("Failed to execute the command: %s\n", err)
-		os.Exit(0)
-	}
-
-	os.Exit(0)
-
-	return
-}
-
-// flagPCParser parses `-pc` flag.
-func flagPCParser(pc string) {
-
-	err := gvPipeConf.Load(pc)
-	if err != nil {
-		fmt.Printf("Failed to load pipe configuration: %s", err)
-		return
-	} else if gvPipeConf.IsLoaded() == false && pc != "" {
-		fmt.Printf("Failed to load pipe configuration. Please use [-pc FILE] option.")
-		return
+	if err := gvPipeConf.Load(pcFile, pipe.LoadOpt{CliInit: true}); err != nil {
+		fmt.Printf("Error due pipe configuration: %s\n", err)
+		flagExit()
 	}
 
 	return
 }
 
-// flagCNGParser parses `-cn` and `-cg` flags and set gvClientNames var.
-func flagCNGParser(cn, cg string) {
+// flagCNG sets the client names and groups.
+func flagCNG(cliName, cliGroup string) {
 
-	gvClientNames = flagMultiParser(cn, ",")
-	cliGroups := flagMultiParser(cg, ",")
-	if gvClientNames == nil && cliGroups == nil {
-		if _, cliDefName := gvPipeConf.ClientDef(); cliDefName != "" {
-			gvClientNames = append(gvClientNames, cliDefName)
-		}
-	} else if cliGroups != nil {
-		for _, val := range cliGroups {
-			cliList := client.ByGroupName(val)
-			for key, _ := range cliList {
-				gvClientNames = append(gvClientNames, cliList[key].Name())
+	gvCliNames = flagMultiParser(cliName, ",")
+	gvCliGroups = flagMultiParser(cliGroup, ",")
+
+	if gvCliGroups != nil {
+		gvCliNames = []string{} // Groups overwrites names
+		for _, val := range gvCliGroups {
+			cl := client.ByGroupName(val)
+			for key, _ := range cl {
+				gvCliNames = append(gvCliNames, cl[key].Name())
 			}
 		}
 	}
 
 	return
+}
+
+// flagCC executes the client command if any.
+func flagCC(cliCmd, cliCmdEM string, cliNames []string) {
+
+	if cliNames == nil {
+		if _, name := gvPipeConf.CliDef(); name != "" {
+			cliNames = append(cliNames, name) // Default client
+		}
+	}
+
+	// Create a new worker
+	ccew, err := worker.New("cce")
+	if err != nil {
+		fmt.Printf("Failed to execute the command: %s\n", err)
+		flagExit()
+	}
+
+	// Set the options
+	if err := ccew.SetOptions(
+		worker.WorkerOptions{
+			Putty: worker.CCEOptions{
+				Clients:     cliNames,
+				Cmd:         cliCmd,
+				CmdErrPrint: true,
+				Method:      flagSymbolParser(cliCmdEM),
+			},
+		},
+	); err != nil {
+		fmt.Printf("Failed to execute the command: %s\n", err)
+		flagExit()
+	}
+
+	// Start the worker
+	if err := ccew.Start(); err != nil {
+		fmt.Printf("Failed to execute the command: %s\n", err)
+		flagExit()
+	}
+
+	flagExit()
+}
+
+// flagSSH executes the given command via ssh client.
+func flagSSH(sshOpt, cliCmd, cliCmdEM string) {
+
+	// Init vars
+	cliAddrs := flagMultiParser(sshOpt, ",")
+	cliConfs := []string{}
+	cliNames := []string{}
+
+	for key, val := range cliAddrs {
+		name := fmt.Sprintf("ssh_%d", key)
+		addr := val
+		authUN := "" // default; current user
+		authKf := gvHOME + "/.ssh/id_rsa"
+
+		if strings.Contains(val, "@") == true {
+			spl := strings.SplitN(val, "@", 2)
+			authUN = spl[0]
+			if len(spl) > 1 {
+				addr = spl[1]
+			}
+		}
+
+		// Prepare JSON content
+		jc := map[string]interface{}{
+			"name":      name,
+			"kind":      "ssh",
+			"isDefault": true,
+			"address":   addr,
+			"auth": map[string]interface{}{
+				"username": authUN,
+				"keyfile":  authKf,
+			},
+		}
+		if buf, err := json.Marshal(jc); err != nil {
+			fmt.Printf("Unexpected error: %s\n", err)
+			flagExit()
+		} else {
+			cliConfs = append(cliConfs, string(buf))
+			cliNames = append(cliNames, name)
+		}
+	}
+
+	jsonCont := "{\"Clients\":[" + strings.Join(cliConfs, ",") + "]}"
+
+	if err := gvPipeConf.LoadJSON(jsonCont, pipe.LoadOpt{CliInit: true}); err != nil {
+		fmt.Printf("Error due pipe configuration: %s\n", err)
+		flagExit()
+	}
+
+	flagCC(cliCmd, cliCmdEM, cliNames)
+
+	flagExit()
 }
 
 // flagMultiParser parses multiple flag value.
@@ -227,4 +302,9 @@ func flagSymbolParser(flagVal string) string {
 	}
 
 	return flagVal
+}
+
+// flagExit
+func flagExit() {
+	os.Exit(0)
 }

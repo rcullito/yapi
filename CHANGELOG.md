@@ -3,8 +3,8 @@
 ### HEAD
 
 ```
+* -ccet option; Timeout (issue #9)
 * -dbg option (issue #13)
-* Remove unnecessary binaries
 ```
 
 ### 0.3.2 (2014-03-22)

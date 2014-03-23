@@ -61,18 +61,16 @@ cd yapi/ && go build yapi.go
 #### Options
 
 ```
-  -cc           : Client command that will be executed.
+  -pc           : Pipe configuration file. Default; pipe.json
 
+  -cc           : Client command that will be executed.
   -cn           : Client name(s) those will be connected.
                   Use comma (,) for multi-client.
-
   -cg           : Client group name(s) those will be connected.
                   Use comma (,) for multi-group.
-
   -ccem         : Execution method for client command. Default; serial
                   Possible values; serial (~), parallel (//)
-
-  -pc           : Pipe configuration file. Default; pipe.json
+  -ccet         : Timeout (millisecond) for client command execution.
 
   -ssh          : Simple SSH client command execution.
                   It uses the current/given username and HOME/.ssh/id_rsa

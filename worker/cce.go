@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"github.com/cmfatih/yapi/client"
 	"sync"
+	"time"
 )
 
 var (
@@ -64,7 +65,12 @@ func (wCCE *cceWorker) Start() error {
 
 	// Because of the ssh pkg; this code block is the best approach so far.
 	// A channel, a wait group and goroutines.
-	// Be careful and test it well during implement timeout stuff.
+
+	// Init timeout vars
+	var timeout <-chan time.Time
+	if wCCE.options.Timeout > 0 {
+		timeout = time.After(time.Duration(wCCE.options.Timeout) * time.Millisecond)
+	}
 
 	// Init sync
 	chann := make(chan bool)
@@ -73,9 +79,6 @@ func (wCCE *cceWorker) Start() error {
 	wg.Add(cliCnt)
 
 	if wCCE.options.Method == "serial" {
-
-		// TODO: Implement timeout
-
 		go func() {
 			for _, name := range wCCE.options.Clients {
 				if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
@@ -89,9 +92,6 @@ func (wCCE *cceWorker) Start() error {
 		}()
 
 	} else if wCCE.options.Method == "parallel" {
-
-		// TODO: Implement timeout
-
 		go func() {
 			for i := 0; i < cliCnt; i++ {
 				go func(cliName string) {
@@ -113,8 +113,20 @@ func (wCCE *cceWorker) Start() error {
 		}
 	}
 
-	wg.Wait()
+	if wCCE.options.Timeout > 0 {
+		select {
+		case _ = <-chann:
+			wg.Wait()
+			return nil
+		case <-timeout:
+			if wCCE.options.CmdErrPrint == true {
+				fmt.Println("failed to execute the command: timeout (" + fmt.Sprintf("%d", wCCE.options.Timeout) + "ms)")
+			}
+			return nil
+		}
+	}
 
+	wg.Wait()
 	<-chann
 
 	return nil
@@ -126,4 +138,5 @@ type CCEOptions struct {
 	Cmd         string
 	CmdErrPrint bool
 	Method      string
+	Timeout     int64
 }

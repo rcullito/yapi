@@ -28,15 +28,17 @@ var (
 	gvPipeConf  pipe.Conf // pipe config
 	gvCliNames  []string  // client names
 	gvCliGroups []string  // client groups
-	flHelp      bool      // help flag
-	flVersion   bool      // version flag
-	flDbg       bool      // debug flag
-	flPipeConf  string    // pipe config flag
-	flCliName   string    // client name flag
-	flCliGroup  string    // client group flag
-	flCliCmd    string    // client command flag
-	flCliCEM    string    // client command execution method flag
-	flSSH       string    // simple ssh client flag
+
+	flPipeConf string // pipe config flag
+	flCliName  string // client name flag
+	flCliGroup string // client group flag
+	flCliCmd   string // client command flag
+	flCliCEM   string // client command execution method flag
+	flCliCET   int64  // client command execution timeout
+	flSSH      string // simple ssh client flag
+	flHelp     bool   // help flag
+	flVersion  bool   // version flag
+	flDbg      bool   // debug flag
 )
 
 func init() {
@@ -51,19 +53,21 @@ func init() {
 	}
 
 	// Init flags
-	flag.BoolVar(&flHelp, "help", false, "Display help and exit.")
-	flag.BoolVar(&flHelp, "h", false, "Display help and exit.")
-	flag.BoolVar(&flVersion, "version", false, "Display version information and exit.")
-	flag.BoolVar(&flVersion, "v", false, "Display version information and exit.")
-	flag.BoolVar(&flDbg, "dbg", false, "Display debug information end exit.")
+	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file. Default; pipe.json")
 
 	flag.StringVar(&flCliCmd, "cc", "", "Client command that will be executed.")
 	flag.StringVar(&flCliName, "cn", "", "Client name(s) those will be connected.")
 	flag.StringVar(&flCliGroup, "cg", "", "Client group name(s) those will be connected.")
 	flag.StringVar(&flCliCEM, "ccem", "serial", "Execution method for client command. Default; serial")
-	flag.StringVar(&flPipeConf, "pc", "", "Pipe configuration file. Default; pipe.json")
+	flag.Int64Var(&flCliCET, "ccet", 0, "Timeout (millisecond) for client command execution.")
 
 	flag.StringVar(&flSSH, "ssh", "", "Simple SSH client command execution.")
+
+	flag.BoolVar(&flHelp, "help", false, "Display help and exit.")
+	flag.BoolVar(&flHelp, "h", false, "Display help and exit.")
+	flag.BoolVar(&flVersion, "version", false, "Display version information and exit.")
+	flag.BoolVar(&flVersion, "v", false, "Display version information and exit.")
+	flag.BoolVar(&flDbg, "dbg", false, "Display debug information end exit.")
 }
 
 func main() {
@@ -77,12 +81,12 @@ func main() {
 
 	if flSSH != "" {
 		// Simple SSH CCE
-		flagSSH(flSSH, flCliCmd, flCliCEM)
+		flagSSH(flSSH, flCliCmd, flCliCEM, flCliCET)
 	} else if flCliCmd != "" {
-		// Client command execution
-		flagPC(flPipeConf)                     // pipe config
-		flagCNG(flCliName, flCliGroup)         // client names and groups
-		flagCC(flCliCmd, flCliCEM, gvCliNames) // client command
+		// Client command
+		flagPC(flPipeConf)                               // pipe config
+		flagCNG(flCliName, flCliGroup)                   // client names and groups
+		flagCC(flCliCmd, flCliCEM, flCliCET, gvCliNames) // client command
 	}
 
 	flagHelp(true) // Default
@@ -113,18 +117,16 @@ func flagHelp(help bool) {
 	fmt.Printf("yapi - Yet Another Pipe Implementation - v%s\n", YAPI_VERSION)
 	fmt.Print(`
   Options:
-    -cc           : Client command that will be executed.
+    -pc           : Pipe configuration file. Default; pipe.json
 
+    -cc           : Client command that will be executed.
     -cn           : Client name(s) those will be connected.
                     Use comma (,) for multi-client.
-
     -cg           : Client group name(s) those will be connected.
                     Use comma (,) for multi-group.
-
     -ccem         : Execution method for client command. Default; serial
                     Possible values; serial (~), parallel (//)
-
-    -pc           : Pipe configuration file. Default; pipe.json
+    -ccet         : Timeout (millisecond) for client command execution.
 
     -ssh          : Simple SSH client command execution.
                     It uses the current/given username and HOME/.ssh/id_rsa
@@ -211,7 +213,7 @@ func flagCNG(cliName, cliGroup string) {
 }
 
 // flagCC executes the client command if any.
-func flagCC(cliCmd, cliCmdEM string, cliNames []string) {
+func flagCC(cliCmd, cliCmdEM string, cliCmdET int64, cliNames []string) {
 
 	if cliNames == nil {
 		if _, name := gvPipeConf.CliDef(); name != "" {
@@ -234,6 +236,7 @@ func flagCC(cliCmd, cliCmdEM string, cliNames []string) {
 				Cmd:         cliCmd,
 				CmdErrPrint: true,
 				Method:      flagSymbolParser(cliCmdEM),
+				Timeout:     cliCmdET,
 			},
 		},
 	); err != nil {
@@ -251,7 +254,7 @@ func flagCC(cliCmd, cliCmdEM string, cliNames []string) {
 }
 
 // flagSSH executes the given command via ssh client.
-func flagSSH(sshOpt, cliCmd, cliCmdEM string) {
+func flagSSH(sshOpt, cliCmd, cliCmdEM string, cliCmdET int64) {
 
 	// Init vars
 	cliAddrs := flagMultiParser(sshOpt, ",")
@@ -299,7 +302,7 @@ func flagSSH(sshOpt, cliCmd, cliCmdEM string) {
 		flagExit()
 	}
 
-	flagCC(cliCmd, cliCmdEM, cliNames)
+	flagCC(cliCmd, cliCmdEM, cliCmdET, cliNames)
 
 	flagExit()
 }

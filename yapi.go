@@ -98,7 +98,6 @@ func flagVer(ver bool) {
 	fmt.Print("Version:\n\n")
 
 	fmt.Printf("  yapi : %s\n", YAPI_VERSION)
-	fmt.Printf("  go   : go1.2\n")
 
 	flagExit()
 }

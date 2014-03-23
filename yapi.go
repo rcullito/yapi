@@ -55,7 +55,7 @@ func init() {
 	flag.BoolVar(&flHelp, "h", false, "Display help and exit.")
 	flag.BoolVar(&flVersion, "version", false, "Display version information and exit.")
 	flag.BoolVar(&flVersion, "v", false, "Display version information and exit.")
-	flag.BoolVar(&flDbg, "dbg", false, "Display the debug information end exit.")
+	flag.BoolVar(&flDbg, "dbg", false, "Display debug information end exit.")
 
 	flag.StringVar(&flCliCmd, "cc", "", "Client command that will be executed.")
 	flag.StringVar(&flCliName, "cn", "", "Client name(s) those will be connected.")
@@ -111,26 +111,27 @@ func flagHelp(help bool) {
 	fmt.Printf("yapi - Yet Another Pipe Implementation - v%s\n", YAPI_VERSION)
 	fmt.Print(`
   Options:
-    -cc       : Client command that will be executed.
-    -cn       : Client name(s) those will be connected.
-                Use comma (,) for multi-client.
-    -cg       : Client group name(s) those will be connected. 
-                Use comma (,) for multi-group.
-    -ccem     : Execution method for client command. Default; serial
-                Possible values; serial (~), parallel (//)
+    -cc           : Client command that will be executed.
 
-    -pc       : Pipe configuration file. Default; pipe.json
+    -cn           : Client name(s) those will be connected.
+                    Use comma (,) for multi-client.
 
-    -ssh      : Simple SSH client command execution.
-                It uses the current/given username and HOME/.ssh/id_rsa 
-                for the private key file.
-                Syntax: [user@]host[:22]
+    -cg           : Client group name(s) those will be connected.
+                    Use comma (,) for multi-group.
 
-    -help     : Display help and exit.
-    -h
-    -version  : Display version information and exit.
-    -v
-    -dbg      : Display the debug information end exit.
+    -ccem         : Execution method for client command. Default; serial
+                    Possible values; serial (~), parallel (//)
+
+    -pc           : Pipe configuration file. Default; pipe.json
+
+    -ssh          : Simple SSH client command execution.
+                    It uses the current/given username and HOME/.ssh/id_rsa
+                    for the private key file.
+                    Syntax: [user@]host[:22]
+
+    -h, -help     : Display help and exit.
+    -v, -version  : Display version information and exit.
+    -dbg          : Display debug information end exit.
 
   Examples:
     yapi -cc ls

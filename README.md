@@ -28,8 +28,6 @@ if you are targeting those platforms. Also see [known issues](#known-issues)
 
 #### Compile source
 
-Supported systems FreeBSD, Linux, NetBSD, OpenBSD, OS X (Darwin), Plan 9, and Windows
-
 [Download the Go distribution](http://golang.org/doc/install) 
 or 
 [compile the Go source](http://golang.org/doc/install/source)
@@ -38,6 +36,8 @@ or
 git clone https://github.com/cmfatih/yapi.git
 cd yapi/ && go build yapi.go
 ```
+
+*Supported systems; FreeBSD, Linux, NetBSD, OpenBSD, OS X (Darwin), Plan 9, and Windows*
 
 ### Getting started
 
@@ -61,29 +61,27 @@ cd yapi/ && go build yapi.go
 #### Options
 
 ```
-  -cc       : Client command that will be executed.
+  -cc           : Client command that will be executed.
 
-  -cn       : Client name(s) those will be connected.
-              Use comma (,) for multi-client.
+  -cn           : Client name(s) those will be connected.
+                  Use comma (,) for multi-client.
 
-  -cg       : Client group name(s) those will be connected. 
-              Use comma (,) for multi-group.
+  -cg           : Client group name(s) those will be connected.
+                  Use comma (,) for multi-group.
 
-  -ccem     : Execution method for client command. Default; serial
-              Possible values; serial (~), parallel (//)
+  -ccem         : Execution method for client command. Default; serial
+                  Possible values; serial (~), parallel (//)
 
-  -pc       : Pipe configuration file. Default; pipe.json
+  -pc           : Pipe configuration file. Default; pipe.json
 
-  -ssh      : Simple SSH client command execution.
-              It uses the current/given username and HOME/.ssh/id_rsa 
-              for the private key file.
-              Syntax: [user@]host[:22]
+  -ssh          : Simple SSH client command execution.
+                  It uses the current/given username and HOME/.ssh/id_rsa
+                  for the private key file.
+                  Syntax: [user@]host[:22]
 
-  -help     : Display help and exit.
-  -h
-
-  -version  : Display version information and exit.
-  -v
+  -h, -help     : Display help and exit.
+  -v, -version  : Display version information and exit.
+  -dbg          : Display debug information end exit.
 ```
 
 #### Examples
@@ -107,7 +105,7 @@ executes `grep ssh` on the **host system** and displays output.
 ```
 yapi -cc "tail -F /var/log/syslog" -ccem parallel
 ```
-It tails `/var/log/syslog` file on the remote system and wait until the host process exit.
+It tails `/var/log/syslog` file on the **remote system** and wait until the host process exit.
 
 -
 

@@ -186,14 +186,10 @@ clients which is used for remote system connections. Here is the default `pipe.j
 
 For ssh clients; `name` and `address` should be defined. Address can be `host` or `host:port`
 If `username` is not defined then current user will be used for authentication.
-`password` and `keyfile` are optional and can be used individually or together.  
+`password` and `keyfile` are optional and can be used individually or together. 
+See [known issues](#known-issues) if you want to use a PuTTY key (.ppk).
 
-If you want to use a PuTTY key (`.ppk`) then you have to 
-[convert](https://www.google.com/search?q=how+to+convert+ppk+to+id_rsa) it to an OpenSSH key. 
-Simply you can use `puttygen YOURKEYFILE.ppk -o id_rsa -O private-openssh` command.
-If you get a `structure error` message due key file then please do not use `.ppk` key file.
-Create your own SSH keys. See 
-[how](https://www.digitalocean.com/community/articles/how-to-set-up-ssh-keys--2)
+
 
 #### Android
 
@@ -219,6 +215,13 @@ Yapi works on Android systems;
 * (cross compiling issue) yapi detects current username (if it is undefined) for SSH clients. 
   If you want to use this feature and you are using `Mac OSX` or `Linux (32bit or arm)` 
   please build your own yapi binary.
+
+* If you want to use a PuTTY key (`.ppk`) then you have to 
+  [convert](https://www.google.com/search?q=how+to+convert+ppk+to+id_rsa) it to an OpenSSH key. 
+  Simply you can use `puttygen YOURKEYFILE.ppk -o id_rsa -O private-openssh` command.
+  If you get a `structure error` message due key file then please do not use `.ppk` key file,
+  create your own SSH keys. See 
+  [how](https://www.digitalocean.com/community/articles/how-to-set-up-ssh-keys--2)
 
 ### Notes
 

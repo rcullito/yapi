@@ -95,7 +95,10 @@ func flagVer(ver bool) {
 		return
 	}
 
-	fmt.Printf("yapi version %s\n", YAPI_VERSION)
+	fmt.Print("Version:\n\n")
+
+	fmt.Printf("  yapi : %s\n", YAPI_VERSION)
+	fmt.Printf("  go   : go1.2\n")
 
 	flagExit()
 }
@@ -168,11 +171,12 @@ func flagDbg(dbg bool) {
 		username = u.Username
 	}
 
-	fmt.Print("yapi debug:\n\n")
+	fmt.Print("Debug:\n\n")
 
-	fmt.Printf("  version       : %s\n", YAPI_VERSION)
-	fmt.Printf("  username      : %s\n", username)
-	fmt.Printf("  home          : %s\n", gvHOME)
+	fmt.Printf("  yapi version : %s\n", YAPI_VERSION)
+	fmt.Printf("  platform     : %s\n", runtime.GOOS)
+	fmt.Printf("  username     : %s\n", username)
+	fmt.Printf("  home         : %s\n", gvHOME)
 
 	flagExit()
 }

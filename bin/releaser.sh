@@ -48,7 +48,6 @@ then
     cp ${FILE} yapi/yapi
     rm -f ${FILE}.tar.gz
     tar -czf ${FILE}.tar.gz yapi/
-    rm -f ${FILE}
     echo "Done! ${FILE}.tar.gz"
   done
   rm -rf yapi/
@@ -63,14 +62,9 @@ then
     cp ${FILE} yapi/yapi.exe
     rm -f ${FILE}.zip
     zip -rq ${FILE}.zip yapi/
-    rm -f ${FILE}
     echo "Done! ${FILE}.zip"
   done
   rm -rf yapi/
-
-  # Cleanup
-  rm pipe.json
-  rm releaser.sh
 
   echo "Finished!"
 else

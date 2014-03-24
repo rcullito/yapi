@@ -3,9 +3,12 @@
 ### HEAD
 
 ```
+```
+
+### 0.3.3 (2014-03-24)
+
 * -ccet option; Timeout (issue #9)
 * -dbg option (issue #13)
-```
 
 ### 0.3.2 (2014-03-22)
 

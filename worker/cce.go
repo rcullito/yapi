@@ -64,7 +64,6 @@ func (wCCE *cceWorker) Start() error {
 	}
 
 	// Because of the ssh pkg; this code block is the best approach so far.
-	// A channel, a wait group and goroutines.
 
 	// Init timeout vars
 	var timeout <-chan time.Time
@@ -73,12 +72,15 @@ func (wCCE *cceWorker) Start() error {
 	}
 
 	// Init sync
-	chann := make(chan bool)
 	wg := new(sync.WaitGroup)
 	cliCnt := len(wCCE.options.Clients)
 	wg.Add(cliCnt)
 
 	if wCCE.options.Method == "serial" {
+
+		// Init channel
+		channDone := make(chan bool)
+
 		go func() {
 			for _, name := range wCCE.options.Clients {
 				if err := client.ExecCmd(wCCE.options.Cmd, name); err != nil {
@@ -88,46 +90,63 @@ func (wCCE *cceWorker) Start() error {
 				}
 				wg.Done()
 			}
-			chann <- true
+			channDone <- true
 		}()
 
+		if wCCE.options.Timeout > 0 {
+			select {
+			case _ = <-channDone:
+				return nil
+			case <-timeout:
+				if wCCE.options.CmdErrPrint == true {
+					fmt.Println("failed to execute the command: timeout (" + fmt.Sprintf("%d", wCCE.options.Timeout) + "ms)")
+				}
+				return nil
+			}
+		}
 	} else if wCCE.options.Method == "parallel" {
+
+		// Init channel
+		channDone := make(chan int)
+
 		go func() {
 			for i := 0; i < cliCnt; i++ {
-				go func(cliName string) {
+				go func(cliName string, index int) {
 					err := client.ExecCmd(wCCE.options.Cmd, cliName)
 					if err != nil {
 						if wCCE.options.CmdErrPrint == true {
 							fmt.Println("failed to execute the command: " + err.Error())
 						}
 					}
-
 					wg.Done()
-				}(wCCE.options.Clients[i])
+					channDone <- index + 1
+				}(wCCE.options.Clients[i], i)
 			}
-			chann <- true
 		}()
+
+		if wCCE.options.Timeout > 0 {
+			for {
+				select {
+				case val := <-channDone:
+					if val == cliCnt {
+						return nil
+					}
+				case <-timeout:
+					if wCCE.options.CmdErrPrint == true {
+						fmt.Println("failed to execute the command: timeout (" + fmt.Sprintf("%d", wCCE.options.Timeout) + "ms)")
+					}
+					return nil
+				}
+			}
+		}
 	} else {
 		if wCCE.options.CmdErrPrint == true {
 			fmt.Println("invalid client command execution method: " + wCCE.options.Method)
-		}
-	}
-
-	if wCCE.options.Timeout > 0 {
-		select {
-		case _ = <-chann:
-			wg.Wait()
-			return nil
-		case <-timeout:
-			if wCCE.options.CmdErrPrint == true {
-				fmt.Println("failed to execute the command: timeout (" + fmt.Sprintf("%d", wCCE.options.Timeout) + "ms)")
-			}
 			return nil
 		}
 	}
 
 	wg.Wait()
-	<-chann
 
 	return nil
 }

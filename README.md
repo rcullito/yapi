@@ -133,7 +133,8 @@ and displays output on the **host system**.
 -
 
 ##### Examples for `-ssh` option
-`-ssh` option doesn't require `pipe.json` file. 
+`-ssh` option doesn't require `pipe.json` file. It uses the current/given username and HOME/.ssh/id_rsa 
+for the private key file.
 ```
 yapi -ssh localhost -cc ls
 yapi -ssh user@localhost:22 -cc ls

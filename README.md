@@ -2,7 +2,7 @@
 
 [yapi](http://github.com/cmfatih/yapi) is an application inspired by 
 [Unix Pipes](https://github.com/cmfatih/yapi/blob/master/REFERENCES.md). 
-Currently it can run given commands on multiple servers using ssh protocol without any dependency.
+Currently it can run given commands on multiple servers without any dependency.
 
 -
 ![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")

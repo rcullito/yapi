@@ -150,7 +150,8 @@ func flagVer() {
 
 	// Output
 	fmt.Print("Version:\n\n")
-	fmt.Printf("  yapi : %s\n", YAPI_VERSION)
+	fmt.Printf("  yapi version : %s\n", YAPI_VERSION)
+	fmt.Printf("  go version   : %s\n", runtime.Version())
 }
 
 // flagHelp displays the help.
@@ -214,7 +215,10 @@ func flagDbg() {
 	// Output
 	fmt.Print("Debug:\n\n")
 	fmt.Printf("  yapi version : %s\n", YAPI_VERSION)
+	fmt.Printf("  go version   : %s\n", runtime.Version())
+	fmt.Printf("  go compiler  : %s\n", runtime.Compiler)
 	fmt.Printf("  platform     : %s\n", runtime.GOOS)
+	fmt.Printf("  architecture : %s\n", runtime.GOARCH)
 	fmt.Printf("  username     : %s\n", username)
 	fmt.Printf("  home         : %s\n", gvHOME)
 }

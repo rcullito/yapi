@@ -1,5 +1,9 @@
 ## References
 
+> We should have some ways of connecting programs like garden hose--screw in 
+> another segment when it becomes when it becomes necessary to massage data in another way. 
+> This is the way of IO also. ~ M. Douglas McIlroy - October 11, 1964
+
 ### History
 
   * [The Origin of Unix Pipes](http://doc.cat-v.org/unix/pipes/)

@@ -1,11 +1,8 @@
-> We should have some ways of connecting programs like garden hose--screw in 
-> another segment when it becomes when it becomes necessary to massage data in another way. 
-> This is the way of IO also. ~ M. Douglas McIlroy - October 11, 1964
-
 ## yapi - Yet Another Pipe Implementation
 
-[yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline. 
-Currently it can execute remote system commands using ssh protocol without any dependency.  
+[yapi](http://github.com/cmfatih/yapi) is an application inspired by 
+[Unix Pipes](https://github.com/cmfatih/yapi/blob/master/REFERENCES.md). 
+Currently it can run given commands on multiple servers using ssh protocol without any dependency.
 
 -
 ![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")

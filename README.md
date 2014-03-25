@@ -1,14 +1,15 @@
 > We should have some ways of connecting programs like garden hose--screw in 
 > another segment when it becomes when it becomes necessary to massage data in another way. 
-> This is the way of IO also. ~ M. Douglas McIlroy - October 11, 1964  
+> This is the way of IO also. ~ M. Douglas McIlroy - October 11, 1964
 
 ## yapi - Yet Another Pipe Implementation
 
 [yapi](http://github.com/cmfatih/yapi) is an application inspired by Unix pipeline. 
-Currently it can execute remote system commands using ssh protocol. See [examples](#examples)  
+Currently it can execute remote system commands using ssh protocol without any dependency.  
 
-For your information; yapi is **still** under heavy development. 
-Feedbacks and pull requests are welcome.  
+-
+![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")
+-
 
 ### Installation
 
@@ -16,11 +17,11 @@ Feedbacks and pull requests are welcome.
 
 Latest release **v0.3.3** - see all [releases](https://github.com/cmfatih/yapi/releases)
 
-| Linux | Windows | Mac OSX | Source | Android |
+| Linux | Windows | Mac OSX | Android | Source |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-darwin-amd64.tar.gz)* | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.3.zip) | - |
-| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-windows-386.zip) | - | [zip](https://github.com/cmfatih/yapi/archive/v0.3.3.zip) | - |
-| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-linux-arm.tar.gz)* | - | - | - | [arm](#android) |
+| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-darwin-amd64.tar.gz)* | - | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.3.tar.gz) |
+| [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-windows-386.zip) | - | - | [zip](https://github.com/cmfatih/yapi/archive/v0.3.3.zip) |
+| [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.3/yapi-linux-arm.tar.gz)* | - | - | [arm](#android) | - |
 
 The binary files marked with `*` are compiled on Linux (64bit) with golang cross compiling support. 
 Please [compile](#compile-source) your own yapi binary for consistency and better performance
@@ -37,18 +38,12 @@ git clone https://github.com/cmfatih/yapi.git
 cd yapi/ && go build yapi.go
 ```
 
-*Supported systems; FreeBSD, Linux, NetBSD, OpenBSD, OS X (Darwin), Plan 9, and Windows*
-
 ### Getting started
 
 * Do not forget to make necessary changes in `pipe.json` file before use `yapi` 
   See [config](#config)  
 * Add the path of yapi binary file to the `PATH` environment variable or 
   use `./yapi` on Unix-like systems.
-
--
-![yapi-figure-rsce](docs/img/figure-yapi-rsceoy-ccem.png "Remote System Command Execution on yapi")
--
 
 ### Usage
 

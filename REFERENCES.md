@@ -16,6 +16,8 @@
 ### Misc
 
   * [Plumbing and Other Utilities](http://doc.cat-v.org/plan_9/4th_edition/papers/plumb)
+  * [Bash - I/O Redirection](http://tldp.org/LDP/abs/html/io-redirection.html)
+  * [Bash - Lists of Commands](http://www.gnu.org/software/bash/manual/bashref.html#Lists)
 
 ### Wikipedia
   * [Pipeline - Unix](http://en.wikipedia.org/wiki/Pipeline_(Unix))

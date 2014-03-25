@@ -7,6 +7,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/cmfatih/yapi/client"
@@ -15,11 +16,12 @@ import (
 	"os"
 	"os/user"
 	"runtime"
+	"runtime/pprof"
 	"strings"
 )
 
 const (
-	YAPI_VERSION = "0.3.3" // app version
+	YAPI_VERSION = "0.3.3^HEAD" // app version
 )
 
 var (
@@ -39,6 +41,7 @@ var (
 	flHelp     bool   // help flag
 	flVersion  bool   // version flag
 	flDbg      bool   // debug flag
+	flProfCPU  string // cpu profile flag
 )
 
 func init() {
@@ -68,6 +71,7 @@ func init() {
 	flag.BoolVar(&flVersion, "version", false, "Display version information and exit.")
 	flag.BoolVar(&flVersion, "v", false, "Display version information and exit.")
 	flag.BoolVar(&flDbg, "dbg", false, "Display debug information end exit.")
+	flag.StringVar(&flProfCPU, "profcpu", "", "Write cpu profile to file.")
 }
 
 func main() {
@@ -75,44 +79,84 @@ func main() {
 	// Init flags
 	flag.Parse()
 
-	flagVer(flVersion) // version
-	flagHelp(flHelp)   // help
-	flagDbg(flDbg)     // debug
+	// Profile cpu
+	if flProfCPU != "" {
+		f, err := os.Create(flProfCPU)
+		if err != nil {
+			fmt.Printf("Failed to profile cpu: %s\n", err)
+			return
+		}
+		if err := pprof.StartCPUProfile(f); err != nil {
+			fmt.Printf("Failed to profile cpu: %s\n", err)
+			return
+		}
+		defer pprof.StopCPUProfile()
+		//defer f.Close() // do not defer
+	}
 
+	// Version
+	if flVersion == true {
+		flagVer()
+		return
+	}
+
+	// Help
+	if flHelp == true {
+		flagHelp()
+		return
+	}
+
+	// Debug
+	if flDbg == true {
+		flagDbg()
+		return
+	}
+
+	// Simple SSH CCE
 	if flSSH != "" {
-		// Simple SSH CCE
-		flagSSH(flSSH, flCliCmd, flCliCEM, flCliCET)
-	} else if flCliCmd != "" {
-		// Client command
-		flagPC(flPipeConf)                               // pipe config
-		flagCNG(flCliName, flCliGroup)                   // client names and groups
-		flagCC(flCliCmd, flCliCEM, flCliCET, gvCliNames) // client command
-	}
-
-	flagHelp(true) // Default
-}
-
-// flagVer displays the version information and exit.
-func flagVer(ver bool) {
-
-	if ver != true {
+		if err := flagSSH(flSSH, flCliCmd, flCliCEM, flCliCET); err != nil {
+			fmt.Println(err.Error())
+		}
 		return
 	}
 
+	// Client command
+	if flCliCmd != "" {
+		// pipe config
+		if err := flagPC(flPipeConf); err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		// client names and groups
+		flagCNG(flCliName, flCliGroup)
+
+		// client command
+		if err := flagCC(flCliCmd, flCliCEM, flCliCET, gvCliNames); err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		return
+	}
+
+	// Default
+	flagHelp()
+	return
+}
+
+// flagVer displays the version information.
+func flagVer() {
+
+	// Output
 	fmt.Print("Version:\n\n")
-
 	fmt.Printf("  yapi : %s\n", YAPI_VERSION)
-
-	flagExit()
 }
 
-// flagHelp displays the help and exit.
-func flagHelp(help bool) {
+// flagHelp displays the help.
+func flagHelp() {
 
-	if help != true {
-		return
-	}
-
+	// Output
 	fmt.Print("Usage: yapi [OPTION]...\n\n")
 	fmt.Printf("yapi - Yet Another Pipe Implementation - v%s\n", YAPI_VERSION)
 	fmt.Print(`
@@ -136,6 +180,7 @@ func flagHelp(help bool) {
     -h, -help     : Display help and exit.
     -v, -version  : Display version information and exit.
     -dbg          : Display debug information end exit.
+    -profcpu      : Write cpu profile to file.
 
   Examples:
     yapi -cc ls
@@ -153,16 +198,10 @@ func flagHelp(help bool) {
   Please report issues to https://github.com/cmfatih/yapi/issues
 
   `)
-
-	flagExit()
 }
 
-// flagDbg displays the version information and exit.
-func flagDbg(dbg bool) {
-
-	if dbg != true {
-		return
-	}
+// flagDbg displays the version information.
+func flagDbg() {
 
 	// Init vars
 	username := ""
@@ -172,33 +211,32 @@ func flagDbg(dbg bool) {
 		username = u.Username
 	}
 
+	// Output
 	fmt.Print("Debug:\n\n")
-
 	fmt.Printf("  yapi version : %s\n", YAPI_VERSION)
 	fmt.Printf("  platform     : %s\n", runtime.GOOS)
 	fmt.Printf("  username     : %s\n", username)
 	fmt.Printf("  home         : %s\n", gvHOME)
-
-	flagExit()
 }
 
 // flagPC loads pipe config.
-func flagPC(pcFile string) {
+func flagPC(pcFile string) error {
 
 	if err := gvPipeConf.Load(pcFile, pipe.LoadOpt{CliInit: true}); err != nil {
-		fmt.Printf("Error due pipe configuration: %s\n", err)
-		flagExit()
+		return errors.New("Error due pipe configuration: " + err.Error())
 	}
 
-	return
+	return nil
 }
 
 // flagCNG sets the client names and groups.
 func flagCNG(cliName, cliGroup string) {
 
+	// Init vars
 	gvCliNames = flagMultiParser(cliName, ",")
 	gvCliGroups = flagMultiParser(cliGroup, ",")
 
+	// Check groups
 	if gvCliGroups != nil {
 		gvCliNames = []string{} // Groups overwrites names
 		for _, val := range gvCliGroups {
@@ -212,20 +250,20 @@ func flagCNG(cliName, cliGroup string) {
 	return
 }
 
-// flagCC executes the client command if any.
-func flagCC(cliCmd, cliCmdEM string, cliCmdET int64, cliNames []string) {
+// flagCC executes the client command.
+func flagCC(cliCmd, cliCmdEM string, cliCmdET int64, cliNames []string) error {
 
+	// Default client
 	if cliNames == nil {
 		if _, name := gvPipeConf.CliDef(); name != "" {
-			cliNames = append(cliNames, name) // Default client
+			cliNames = append(cliNames, name)
 		}
 	}
 
 	// Create a new worker
 	ccew, err := worker.New("cce")
 	if err != nil {
-		fmt.Printf("Failed to execute the command: %s\n", err)
-		flagExit()
+		return errors.New("Failed to execute the command: " + err.Error())
 	}
 
 	// Set the options
@@ -240,21 +278,19 @@ func flagCC(cliCmd, cliCmdEM string, cliCmdET int64, cliNames []string) {
 			},
 		},
 	); err != nil {
-		fmt.Printf("Failed to execute the command: %s\n", err)
-		flagExit()
+		return errors.New("Failed to execute the command: " + err.Error())
 	}
 
 	// Start the worker
 	if err := ccew.Start(); err != nil {
-		fmt.Printf("Failed to execute the command: %s\n", err)
-		flagExit()
+		return errors.New("Failed to execute the command: " + err.Error())
 	}
 
-	flagExit()
+	return nil
 }
 
 // flagSSH executes the given command via ssh client.
-func flagSSH(sshOpt, cliCmd, cliCmdEM string, cliCmdET int64) {
+func flagSSH(sshOpt, cliCmd, cliCmdEM string, cliCmdET int64) error {
 
 	// Init vars
 	cliAddrs := flagMultiParser(sshOpt, ",")
@@ -287,8 +323,7 @@ func flagSSH(sshOpt, cliCmd, cliCmdEM string, cliCmdET int64) {
 			},
 		}
 		if buf, err := json.Marshal(jc); err != nil {
-			fmt.Printf("Unexpected error: %s\n", err)
-			flagExit()
+			return errors.New("Unexpected error: " + err.Error())
 		} else {
 			cliConfs = append(cliConfs, string(buf))
 			cliNames = append(cliNames, name)
@@ -298,13 +333,14 @@ func flagSSH(sshOpt, cliCmd, cliCmdEM string, cliCmdET int64) {
 	jsonCont := "{\"Clients\":[" + strings.Join(cliConfs, ",") + "]}"
 
 	if err := gvPipeConf.LoadJSON(jsonCont, pipe.LoadOpt{CliInit: true}); err != nil {
-		fmt.Printf("Error due pipe configuration: %s\n", err)
-		flagExit()
+		return errors.New("Error due pipe configuration: " + err.Error())
 	}
 
-	flagCC(cliCmd, cliCmdEM, cliCmdET, cliNames)
+	if err := flagCC(cliCmd, cliCmdEM, cliCmdET, cliNames); err != nil {
+		return err
+	}
 
-	flagExit()
+	return nil
 }
 
 // flagMultiParser parses multiple flag value.
@@ -338,9 +374,4 @@ func flagSymbolParser(flagVal string) string {
 	}
 
 	return flagVal
-}
-
-// flagExit
-func flagExit() {
-	os.Exit(0)
 }

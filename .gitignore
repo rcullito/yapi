@@ -10,3 +10,5 @@ sources/
 
 /yapi
 /yapi.exe
+
+*.pprof

@@ -80,6 +80,7 @@ cd yapi/ && go build yapi.go
   -h, -help     : Display help and exit.
   -v, -version  : Display version information and exit.
   -dbg          : Display debug information end exit.
+  -profcpu      : Write cpu profile to file.
 ```
 
 #### Examples

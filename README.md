@@ -22,7 +22,7 @@ Latest release **v0.3.3** - see all [releases](https://github.com/cmfatih/yapi/r
 
 The binary files marked with `*` are compiled on Linux (64bit) with golang cross compiling support. 
 Please [compile](#compile-source) your own yapi binary for consistency and better performance
-if you are targeting those platforms. Also see [known issues](#known-issues)
+if you are targeting those platforms. See [more information](#known-issues).
 
 #### Compile source
 

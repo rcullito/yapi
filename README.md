@@ -31,8 +31,13 @@ or
 [compile the Go source](http://golang.org/doc/install/source)
 
 ```
-git clone https://github.com/cmfatih/yapi.git
-cd yapi/ && go build yapi.go
+go get -u github.com/cmfatih/yapi
+
+# Unix-like systems
+cd $GOPATH/src/github.com/cmfatih/yapi && go build yapi.go
+
+# Wndows
+cd %GOPATH%/src/github.com/cmfatih/yapi && go build yapi.go
 ```
 
 ### Getting started

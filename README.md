@@ -42,8 +42,8 @@ cd %GOPATH%/src/github.com/cmfatih/yapi && go build yapi.go
 
 ### Getting started
 
-* Do not forget to make necessary changes in `pipe.json` file before use `yapi` 
-  See [config](#config)  
+* If you just want to try yapi without any setup use [-ssh](#examples-for--ssh-option) option. 
+  Otherwise you have to make necessary changes in [pipe.json](#config) file before use `yapi`
 * Add the path of yapi binary file to the `PATH` environment variable or 
   use `./yapi` on Unix-like systems.
 

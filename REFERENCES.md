@@ -4,6 +4,10 @@
 > another segment when it becomes when it becomes necessary to massage data in another way. 
 > This is the way of IO also. ~ M. Douglas McIlroy - October 11, 1964
 
+> This is the Unix philosophy: Write programs that do one thing and do it well. 
+> Write programs to work together. Write programs to handle text streams, 
+> because that is a universal interface. ~ M. Douglas McIlroy - *A Quarter Century of Unix*
+
 ### History
 
   * [The Origin of Unix Pipes](http://doc.cat-v.org/unix/pipes/)

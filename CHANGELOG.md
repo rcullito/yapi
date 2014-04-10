@@ -3,8 +3,12 @@
 ### HEAD
 
 ```
-* -profcpu option (issue #14)
 ```
+
+### 0.3.4 (2014-04-10)
+
+* -profcpu option (issue #14)
+* Misc. changes
 
 ### 0.3.3 (2014-03-24)
 

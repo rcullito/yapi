@@ -5,6 +5,10 @@
 ```
 ```
 
+### 0.3.5 (2014-04-10)
+
+* Fixing for ssh pkg
+
 ### 0.3.4 (2014-04-10)
 
 * -profcpu option (issue #14)

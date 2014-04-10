@@ -6,11 +6,15 @@
 //
 // References:
 //   `ClientKeyring` and `ClientPassword`: http://dave.cheney.net/?p=9
+//
+// Todo:
+//   Implementation for new ssh pkg: https://groups.google.com/forum/#!msg/Golang-nuts/AoVxQ4bB5XQ/i8kpMxdbVlEJ
 
 package client
 
 import (
-	"code.google.com/p/go.crypto/ssh"
+	//"code.google.com/p/go.crypto/ssh"
+	"code.google.com/p/gosshold/ssh"
 	"errors"
 	"github.com/cmfatih/yapi/stdin"
 	"io"

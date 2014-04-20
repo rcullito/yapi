@@ -223,7 +223,7 @@ Yapi works on Android systems;
 ### Notes
 
 * For issues see [Issues](https://github.com/cmfatih/yapi/issues)
-* For design goals and coding see [CODING.md](https://github.com/cmfatih/coding/blob/master/README.md)
+* For design goals and coding see [coding](https://github.com/cmfatih/coding)
 * For all notable references see [REFERENCES.md](https://github.com/cmfatih/yapi/blob/master/REFERENCES.md)
 
 ### Changelog

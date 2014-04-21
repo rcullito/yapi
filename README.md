@@ -36,7 +36,7 @@ go get -u github.com/cmfatih/yapi
 # Unix-like systems
 cd $GOPATH/src/github.com/cmfatih/yapi && go build yapi.go
 
-# Wndows
+# Windows
 cd %GOPATH%/src/github.com/cmfatih/yapi && go build yapi.go
 ```
 

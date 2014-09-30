@@ -16,7 +16,7 @@ Latest release **v0.3.5** - see all [releases](https://github.com/cmfatih/yapi/r
 
 | Linux | Windows | Mac OSX | Android | Source |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-darwin-amd64.tar.gz)* | - | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.5.tar.gz) |
+| [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-linux-amd64.tar.gz) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-windows-amd64.zip) | [64bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-darwin-amd64.tar.gz) | - | [tar.gz](https://github.com/cmfatih/yapi/archive/v0.3.5.tar.gz) |
 | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-linux-386.tar.gz)* | [32bit](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-windows-386.zip) | - | - | [zip](https://github.com/cmfatih/yapi/archive/v0.3.5.zip) |
 | [arm](https://github.com/cmfatih/yapi/releases/download/v0.3.5/yapi-linux-arm.tar.gz)* | - | - | [arm](#android) | - |
 
